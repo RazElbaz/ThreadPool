@@ -1,6 +1,3 @@
-#ifndef _SEMAPHORE_
-#define _SEMAPHORE_
-
 #include <unistd.h>
 #include <signal.h>
 #include <stdio.h>
@@ -34,4 +31,3 @@ void semaphore_post_all(Psemaphore Psem);
 // Function to decrement the value of a semaphore and wait if the value is currently 0 (i.e. wait)
 void semaphore_wait(Psemaphore Psem);
 
-#endif
