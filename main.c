@@ -1,51 +1,91 @@
+#include <time.h>
+#include "codec.h"
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include <pthread.h>
+#include <stdint.h>
 #include "threadpool.h"
 
-#define MAX_BUFFER_SIZE 1024
+#include <stdlib.h> 
+#include <unistd.h> 
+#include <stdbool.h>
+#include "main.h"
 
-void encode_data(void *data)
+int key;
+char mode;             // Flag indicating whether to encrypt or decrypt
+int current_index;     // Index of the current value being read
+int data_index;        // Index of the next value to be processed
+
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; 
+pthread_cond_t condition_variable = PTHREAD_COND_INITIALIZER; 
+// The task that will be executed by the thread pool
+void new_task(void *arg)
 {
-    /* Add code to perform encryption */
+    Pinput data = (Pinput) arg;
+    if (mode == 'e') {
+        encrypt(data->value, key);
+    } else if (mode == 'd') {
+        decrypt(data->value, key);
+    }
+    // Wait until the current data item is the one that needs to be processed
+    pthread_mutex_lock(&mutex);
+    while (data->index != data_index) {
+        pthread_cond_wait(&condition_variable, &mutex);
+    }
+    printf("%s", data->value);
+    data_index++;
+    // Broadcast to all waiting threads that the next data item can be processed
+    pthread_cond_broadcast(&condition_variable);
+    pthread_mutex_unlock(&mutex);
+    free(data->value);
+    free(data);
 }
 
-void decode_data(void *data)
-{
-    /* Add code to perform decryption */
-}
 
-int main(int argc, char **argv)
-{
-    int key, i;
-    char buffer[MAX_BUFFER_SIZE];
-    size_t len;
+int main(int argc, char *argv[]) {
+    data_index = 0;
+    current_index = 0;
 
-    /* Parse command-line arguments */
-    if (argc != 3 || (strcmp(argv[1], "-e") != 0 && strcmp(argv[1], "-d") != 0)) {
-        fprintf(stderr, "Usage: %s {-e|-d} key\n", argv[0]);
-        return 1;
+    // Check if the program was run with the correct arguments
+    if (argc < 3) {
+        fprintf(stderr, "Usage: %s <key> <-e/-d>\n", argv[0]);
+        exit(1);
     }
 
-    key = atoi(argv[2]);
+    // Parse the encryption key and the encryption/decryption mode
+    key = atoi(argv[1]);
+    mode = argv[2][1];
+    if (mode != 'e' && mode != 'd') {
+        fprintf(stderr, "Invalid mode: %c, must be -e or -d\n", mode);
+        exit(1);
+    }
 
-    /* Create threadpool */
-    ThreadPool *pool = threadpool_create(8);
+    // Initialize the thread pool with the number of available CPUs
+    int num_threads = sysconf(_SC_NPROCESSORS_ONLN);
+    threadpool thpool = thpool_init(num_threads);
 
-    /* Submit tasks to threadpool */
-    while ((len = fread(buffer, 1, MAX_BUFFER_SIZE, stdin)) > 0) {
-        for (i = 0; i < len; i++) {
-            if (strcmp(argv[1], "-e") == 0) {
-                threadpool_submit(pool, encode_data, (void *)((unsigned long)buffer[i] + key));
-            } else {
-                threadpool_submit(pool, decode_data, (void *)((unsigned long)buffer[i] - key));
-            }
+    // Read data from stdin and add tasks to the thread pool
+    while (1) {
+        Pinput data = (Pinput) calloc(1, sizeof(data));
+        if (!data) {
+            perror("calloc");
+            exit(1);
         }
+        data->index = current_index;
+        data->value = (char *) malloc(MAX_DATA_COUNT);
+        if (!data->value) {
+            perror("malloc");
+            free(data);
+            exit(1);
+        }
+        if (!fgets(data->value, MAX_DATA_COUNT, stdin)) {
+            break;
+        }
+        thpool_add_work(thpool, new_task, data);
+        current_index++;
     }
 
-    /* Destroy threadpool */
-    threadpool_destroy(pool);
-
+    // Wait for all tasks to complete and destroy the thread pool
+    thpool_wait(thpool);
+    thpool_destroy(thpool);
     return 0;
 }
