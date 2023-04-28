@@ -32,7 +32,7 @@ void semaphore_reset(Psemaphore Psem) {
 }
 
 // Signals the semaphore
-void semaphore_post(Psemaphore Psem) {
+void release_semaphore(Psemaphore Psem) {
     // Check if semaphore pointer is NULL
     if (Psem == NULL) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
@@ -49,7 +49,7 @@ void semaphore_post(Psemaphore Psem) {
 }
 
 // Signals all waiting threads on the semaphore
-void semaphore_post_all(Psemaphore Psem) {
+void release_all_semaphores(Psemaphore Psem) {
     // Check if semaphore pointer is NULL
     if (Psem == NULL) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
@@ -97,4 +97,19 @@ void semaphore_destroy(Psemaphore Psem) {
         fprintf(stderr, "Error: failed to destroy condition variable\n");
         exit(1);
     }
+}
+
+// Function to destroy the semaphore
+void semaphore_destroy(semaphore *Psem) {
+    // Check if semaphore pointer is NULL
+    if (Psem == NULL) {
+        fprintf(stderr, "Error: semaphore pointer is NULL\n");
+        return;
+    }
+
+    // Destroy the mutex
+    pthread_mutex_destroy(&Psem->mutex);
+
+    // Destroy the condition variable
+    pthread_cond_destroy(&Psem->cond);
 }
