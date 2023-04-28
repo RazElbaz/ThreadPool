@@ -99,17 +99,3 @@ void semaphore_destroy(Psemaphore Psem) {
     }
 }
 
-// Function to destroy the semaphore
-void semaphore_destroy(semaphore *Psem) {
-    // Check if semaphore pointer is NULL
-    if (Psem == NULL) {
-        fprintf(stderr, "Error: semaphore pointer is NULL\n");
-        return;
-    }
-
-    // Destroy the mutex
-    pthread_mutex_destroy(&Psem->mutex);
-
-    // Destroy the condition variable
-    pthread_cond_destroy(&Psem->cond);
-}

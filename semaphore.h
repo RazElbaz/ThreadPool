@@ -32,6 +32,6 @@ void release_all_semaphores(Psemaphore Psem);
 void semaphore_wait(Psemaphore Psem);
 
 // Function to destroy the semaphore
-void semaphore_destroy(Psemaphore Psem) ;
+void semaphore_destroy(Psemaphore Psem);
 
 
