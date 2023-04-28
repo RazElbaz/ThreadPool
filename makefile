@@ -1,17 +1,25 @@
-.PHONY: all clean
+CC=gcc
+CFLAGS=-Wall -pthread -lpthread
+OBJ=threadpool.o task.o semaphore.o
 
-all: threadpool
+all: coder
 
-threadpool: main.o threadpool.o
-	gcc -o threadpool main.o threadpool.o
+export LD_LIBRARY_PATH=/path/to/libraries/folder:$LD_LIBRARY_PATH
 
+coder: codec.h $(OBJ)
+	$(CC) $(CFLAGS) main.c -L. -lCodec -o coder $(OBJ)
 
-threadpool.o: main.c threadpool.h
-	gcc -c main.c
+semaphore.o: semaphore.c semaphore.h
+	$(CC) -c semaphore.c $(CFLAGS)
 
+task.o: task.c task.h
+	$(CC) -c task.c $(CFLAGS)
 
-threadpool.o: threadpool.c
-	gcc -c threadpool.c
+threadpool.o: threadpool.c threadpool.h
+	$(CC) -c threadpool.c $(CFLAGS)
+
+main.o: main.c threadpool.h task.h semaphore.h thread.h
+	$(CC) -c main.c $(CFLAGS)
 
 clean:
-	rm -rf *.o threadpool
+	rm -f coder $(OBJ)
