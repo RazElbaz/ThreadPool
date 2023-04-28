@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 
     // Initialize the thread pool with the number of available CPUs
     int num_threads = sysconf(_SC_NPROCESSORS_ONLN);
-    threadpool thpool = thpool_init(num_threads);
+    threadpool thpool = threadpool_init(num_threads);
 
     // Read data from stdin and add tasks to the thread pool
     while (1) {
@@ -76,12 +76,12 @@ int main(int argc, char *argv[]) {
         if (!fgets(data->value, MAX_DATA_COUNT, stdin)) {
             break;
         }
-        thpool_add_work(thpool, new_task, data);
+        threadpool_new_task(thpool, new_task, data);
         programData.current_index++;
     }
 
     // Wait for all tasks to complete and destroy the thread pool
-    thpool_wait(thpool);
-    thpool_destroy(thpool);
+    threadpool_wait(thpool);
+    threadpool_destroy(thpool);
     return 0;
 }
