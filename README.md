@@ -16,6 +16,24 @@
   
 The goal is to implement a threadpool mechanism, and implement syncronization.
 
+# The CMD syntax:
+
+coder key -e < input_file > encrypted_file
+coder key -d < encrypted_file > output_file
+pipe | coder key -e > encrypted_file
+cat encrypted_file | coder key -d > output_file
+
+**Here's an explanation of the different components:**
+
+coder: The name of the executable program.  
+key: A command-line argument representing the encryption or decryption key.  
+-e and -d: Flags to indicate whether the program should perform encryption (-e) or decryption (-d).  
+< input_file: Input redirection from a file. The contents of input_file will be provided as input to the program.  
+> encrypted_file: Output redirection to a file. The encrypted data will be written to encrypted_file.  
+> output_file: Output redirection to a file. The decrypted data will be written to output_file.  
+pipe |: Input piped from another command. The output of the preceding command will be used as input for the encryption process.  
+To use the program, you would replace key with the actual encryption/decryption key and specify the appropriate files for input, output, and piping, depending on your specific use case.
+
 
 # The task in details:   
 All the files given to me are in the ```threadPoolTask``` folder.  
