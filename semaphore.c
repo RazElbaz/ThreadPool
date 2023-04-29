@@ -1,10 +1,10 @@
 #include "semaphore.h"
 
 // Initializes a semaphore with a given value
-void semaphore_init(semaphore *Psem, int value)
+void semaphore_init(semaphore *PSemaphore, int value)
 {
     // Check if semaphore pointer is NULL
-    if (Psem == NULL) {
+    if (PSemaphore == NULL) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
@@ -14,94 +14,113 @@ void semaphore_init(semaphore *Psem, int value)
         exit(1);
     }
     // Initialize mutex and condition variable
-    pthread_mutex_init(&(Psem->mutex), NULL);
-    pthread_cond_init(&(Psem->cond), NULL);
+    pthread_mutex_init(&(PSemaphore->mutex), NULL);
+    pthread_cond_init(&(PSemaphore->cond), NULL);
     // Set semaphore value
-    Psem->value = value;
+    PSemaphore->value = value;
 }
 
 // Resets a semaphore to 0
-void semaphore_reset(Psemaphore Psem) {
+void semaphore_reset(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
-    if (Psem == NULL) {
+    if (PSemaphore == NULL) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
     // Reset semaphore to 0
-    semaphore_init(Psem, 0);
+    semaphore_init(PSemaphore, 0);
 }
 
 // Signals the semaphore
-void release_semaphore(Psemaphore Psem) {
+void release_semaphore(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
-    if (Psem == NULL) {
+    if (PSemaphore == NULL) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
     // Lock the mutex
-    LOCK_MUTEX(&Psem->mutex);
+    LOCK_MUTEX(&PSemaphore->mutex);
     // Set semaphore value to 1
-    Psem->value = 1;
+    PSemaphore->value = 1;
     // Signal one waiting thread on the condition variable
     // Check if there are any waiting threads
-    if (Psem->count > 0) {
+    if (PSemaphore->count > 0) {
         // Signal the condition variable to wake up a waiting thread
-        pthread_cond_signal(&Psem->cond);
+        pthread_cond_signal(&PSemaphore->cond);
     }
     
     // Unlock the mutex
-    UNLOCK_MUTEX(&Psem->mutex);
+    UNLOCK_MUTEX(&PSemaphore->mutex);
 }
 
 // Signals all waiting threads on the semaphore
-void release_all_semaphores(Psemaphore Psem) {
+void release_all_semaphores(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
-    if (Psem == NULL) {
+    if (PSemaphore == NULL) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
     // Lock the mutex
-    LOCK_MUTEX(&Psem->mutex);
+    LOCK_MUTEX(&PSemaphore->mutex);
     // Set semaphore value to 1
-    Psem->value = 1;
+    PSemaphore->value = 1;
     // Signal all waiting threads on the condition variable
-    pthread_cond_broadcast(&Psem->cond);
+    pthread_cond_broadcast(&PSemaphore->cond);
     // Unlock the mutex
-    UNLOCK_MUTEX(&Psem->mutex);
+    UNLOCK_MUTEX(&PSemaphore->mutex);
 }
 
 // Waits on the semaphore until its value is 1
-void semaphore_wait(Psemaphore Psem) {
+void semaphore_wait(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
-    if (Psem == NULL) {
+    if (PSemaphore == NULL) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
     // Lock the mutex
-    LOCK_MUTEX(&Psem->mutex);
+    LOCK_MUTEX(&PSemaphore->mutex);
     // Increment the count of waiting threads
-    Psem->count++;
+    PSemaphore->count++;
     // Wait on the condition variable until semaphore value is 1
-    while (Psem->value != 1) {
-        pthread_cond_wait(&Psem->cond, &Psem->mutex);
+    while (PSemaphore->value != 1) {
+        pthread_cond_wait(&PSemaphore->cond, &PSemaphore->mutex);
     }
     // Decrease the count of waiting threads
-    Psem->count--;
+    PSemaphore->count--;
     // Set semaphore value to 0
-    Psem->value = 0;
+    PSemaphore->value = 0;
     // Unlock the mutex
-    UNLOCK_MUTEX(&Psem->mutex);
+    UNLOCK_MUTEX(&PSemaphore->mutex);
 }
 
+// Function to decrement the value of a semaphore without waiting
+int semaphore_try_wait(Psemaphore PSemaphore) {
+    LOCK_MUTEX(&(PSemaphore->mutex));
+    if (PSemaphore->value > 0) {
+        PSemaphore->value--;
+        UNLOCK_MUTEX(&(PSemaphore->mutex));
+        return 0;
+    } else {
+        UNLOCK_MUTEX(&(PSemaphore->mutex));
+        return -1;
+    }
+}
+// Function to get the current value of the semaphore
+int semaphore_get_value(Psemaphore PSemaphore) {
+    LOCK_MUTEX(&(PSemaphore->mutex));
+    int value = PSemaphore->value;
+    UNLOCK_MUTEX(&(PSemaphore->mutex));
+    return value;
+}
 // Destroys the semaphore and frees any associated resources
-void semaphore_destroy(Psemaphore Psem) {
+void semaphore_destroy(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
-    if (Psem == NULL) {
+    if (PSemaphore == NULL) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
     // Destroy the mutex and check for errors
-    int mutex_destroy_result = pthread_mutex_destroy(&Psem->mutex);
+    int mutex_destroy_result = pthread_mutex_destroy(&PSemaphore->mutex);
     if (mutex_destroy_result != 0) {
         fprintf(stderr, "Error: failed to destroy condition variable\n");
         exit(1);
