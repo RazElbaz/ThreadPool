@@ -12,25 +12,53 @@
 
 ProgramData programData;
 
-// The task that will be executed by the threadpool
-void new_task(void *arg)
-{
-    Pinput data = (Pinput) arg;
+// Helper function to process the data (either encryption or decryption)
+void process_data(Pinput data) {
+    // Check the mode and call the appropriate function
     if (programData.mode == 'e') {
         encrypt(data->value, programData.key);
     } else if (programData.mode == 'd') {
         decrypt(data->value, programData.key);
     }
-    // Wait until the current data item is the one that needs to be processed
+}
+
+// Helper function to wait until the current data item is the one that needs to be processed
+void wait_for_data_index(Pinput data) {
+    // Acquire the lock to protect access to the shared variable programData.data_index
     pthread_mutex_lock(&mutex);
+    // While the current data item is not the one that needs to be processed, wait on the condition variable
     while (data->index != programData.data_index) {
         pthread_cond_wait(&condition_variable, &mutex);
     }
-    printf("%s", data->value);
-    programData.data_index++;
-    // Broadcast to all waiting threads that the next data item can be processed
-    pthread_cond_broadcast(&condition_variable);
+    // Release the lock before returning
     pthread_mutex_unlock(&mutex);
+}
+
+// Helper function to broadcast to all waiting threads that the next data item can be processed
+void notify_next_data() {
+    // Acquire the lock to protect access to the shared variable programData.data_index
+    pthread_mutex_lock(&mutex);
+    // Increment the data index to indicate that the next data item can be processed
+    programData.data_index++;
+    // Signal all threads waiting on the condition variable that the data index has changed
+    pthread_cond_broadcast(&condition_variable);
+    // Release the lock before returning
+    pthread_mutex_unlock(&mutex);
+}
+
+// The task that will be executed by the threadpool
+void new_task(void *arg) {
+    // Cast the argument to a Pinput type
+    Pinput data = (Pinput)arg;
+    // Process the data (either encryption or decryption)
+    process_data(data);
+    // Wait until the current data item is the one that needs to be processed
+    wait_for_data_index(data);
+    // Print the data
+    printf("%s", data->value);
+    // Notify all waiting threads that the next data item can be processed
+    notify_next_data();
+    // Free the memory allocated for the data item
     free(data->value);
     free(data);
 }
