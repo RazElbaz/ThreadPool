@@ -11,21 +11,21 @@
 </table>
 
 </table>
-HW2 – Threads.  
-In this task you should train your threading skills.  
-The goal is to implement a threadpool mechanism, and implement syncronization (as studied at class)  
-Just to remind you, we use multi-threading to utilise multi-cores C, and improve performance by that.  
-Many web-servers use the same approach to suport multiple clients in the same time.  
-In our task, we will use an encryption algorithm, that is not so fast.  
-Your goal is to parallelize it, so it runs faster in multi-core system.  
-The task in details:  
-You are given a shared (SO) library, compiled for x86, with two functions: “encode” and “decode”.  
-Also a simple basic_main is included to demonstrate functionality of the library.  
-As the encription algorithm is made by a beginer student, it will take 5ms for each char, and it’s not  
-capable of manipulating more thatn 1k (1024) bytes of data. More than this will be ignored.  
-You have to implement a CMD TOOL that will use the algorithm above.  
-By cmd tool we mean , that your executable will get its working data from stdIn, and put the output to  
-stdOut. A datastream (not a file) maybe used to test your solution.  
+
+# Introduction:
+  
+The goal is to implement a threadpool mechanism, and implement syncronization.
+
+
+# The task in details:   
+All the files given to me are in the threadPoolTask folder
+I was given a shared library (SO), compiled for x86, with two functions: "encode" and "decode".
+A simple basic_main is also included to demonstrate the functionality of the library.
+Since the encryption algorithm is done by a novice student, it will take 5ms for each char, which is not
+Capable of handling more than 1k (1024) bytes of data. More than that will be ignored.
+I had to implement a CMD TOOL that would use the algorithm above.
+By the cmd tool we mean, that my executable will receive its work data from stdIn, and put the output to stdOut.
+
 As an option of stdIn reading, see the stdin_main example. Use it like this:  
 cat readme.txt | ./tester 2  
 where readme.txt is a data file (or some stream)  
