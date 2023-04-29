@@ -1,23 +1,36 @@
 #include "semaphore.h"
 
 // Initializes a semaphore with a given value
-void semaphore_init(semaphore *PSemaphore, int value)
-{
+void semaphore_init(semaphore *PSemaphore, int value) {
     // Check if semaphore pointer is NULL
     if (PSemaphore == NULL) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
+    
     // Check if the value is either 0 or 1
     if (value != 0 && value != 1) {
         fprintf(stderr, "Error: semaphore value must be either 0 or 1\n");
         exit(1);
     }
-    // Initialize mutex and condition variable
-    pthread_mutex_init(&(PSemaphore->mutex), NULL);
-    pthread_cond_init(&(PSemaphore->cond), NULL);
+    
+    // Initialize mutex and check for errors
+    if (pthread_mutex_init(&(PSemaphore->mutex), NULL) != 0) {
+        fprintf(stderr, "Error: failed to initialize mutex\n");
+        exit(1);
+    }
+    
+    // Initialize condition variable and check for errors
+    if (pthread_cond_init(&(PSemaphore->cond), NULL) != 0) {
+        fprintf(stderr, "Error: failed to initialize condition variable\n");
+        exit(1);
+    }
+    
     // Set semaphore value
     PSemaphore->value = value;
+    
+    // Initialize count to 0
+    PSemaphore->count = 0;
 }
 
 // Resets a semaphore to 0
