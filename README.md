@@ -1,4 +1,16 @@
 # ThreadPool
+## written by ✨
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/RazElbaz"><br /><sub><b>Raz Elbaz</b></sub></a><br /> </td>
+  </tr>
+</table>
+
+</table>
 HW2 – Threads.  
 In this task you should train your threading skills.  
 The goal is to implement a threadpool mechanism, and implement syncronization (as studied at class)  
