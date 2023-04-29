@@ -43,7 +43,12 @@ void release_semaphore(Psemaphore Psem) {
     // Set semaphore value to 1
     Psem->value = 1;
     // Signal one waiting thread on the condition variable
-    pthread_cond_signal(&Psem->cond);
+    // Check if there are any waiting threads
+    if (Psem->count > 0) {
+        // Signal the condition variable to wake up a waiting thread
+        pthread_cond_signal(&Psem->cond);
+    }
+    
     // Unlock the mutex
     UNLOCK_MUTEX(&Psem->mutex);
 }
@@ -74,10 +79,14 @@ void semaphore_wait(Psemaphore Psem) {
     }
     // Lock the mutex
     LOCK_MUTEX(&Psem->mutex);
+    // Increment the count of waiting threads
+    Psem->count++;
     // Wait on the condition variable until semaphore value is 1
     while (Psem->value != 1) {
         pthread_cond_wait(&Psem->cond, &Psem->mutex);
     }
+    // Decrease the count of waiting threads
+    Psem->count--;
     // Set semaphore value to 0
     Psem->value = 0;
     // Unlock the mutex
