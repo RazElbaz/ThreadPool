@@ -18,7 +18,7 @@ The goal is to implement a threadpool mechanism, and implement syncronization.
 
 
 # The task in details:   
-All the files given to me are in the threadPoolTask folder
+All the files given to me are in the '''threadPoolTask''' folder.
 I was given a shared library (SO), compiled for x86, with two functions: "encode" and "decode".
 A simple basic_main is also included to demonstrate the functionality of the library.
 Since the encryption algorithm is done by a novice student, it will take 5ms for each char, which is not
