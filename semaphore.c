@@ -44,6 +44,7 @@ void semaphore_reset(Psemaphore PSemaphore) {
     semaphore_init(PSemaphore, 0);
 }
 
+
 // Signals the semaphore
 void release_semaphore(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
@@ -51,20 +52,28 @@ void release_semaphore(Psemaphore PSemaphore) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
-    // Lock the mutex
+    
+    // Lock the mutex to ensure exclusive access to shared data
     LOCK_MUTEX(&PSemaphore->mutex);
+    
     // Set semaphore value to 1
     PSemaphore->value = 1;
+    
     // Signal one waiting thread on the condition variable
     // Check if there are any waiting threads
     if (PSemaphore->count > 0) {
         // Signal the condition variable to wake up a waiting thread
-        pthread_cond_signal(&PSemaphore->cond);
+        int signal_result = pthread_cond_signal(&PSemaphore->cond);
+        if (signal_result != 0) {
+            fprintf(stderr, "Error: failed to signal condition variable\n");
+            exit(1);
+        }
     }
     
-    // Unlock the mutex
+    // Unlock the mutex to allow other threads to access the shared data
     UNLOCK_MUTEX(&PSemaphore->mutex);
 }
+
 
 // Signals all waiting threads on the semaphore
 void release_all_semaphores(Psemaphore PSemaphore) {
@@ -73,15 +82,24 @@ void release_all_semaphores(Psemaphore PSemaphore) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
-    // Lock the mutex
+    
+    // Lock the mutex to ensure exclusive access to shared data
     LOCK_MUTEX(&PSemaphore->mutex);
+    
     // Set semaphore value to 1
     PSemaphore->value = 1;
+    
     // Signal all waiting threads on the condition variable
-    pthread_cond_broadcast(&PSemaphore->cond);
-    // Unlock the mutex
+    int broadcast_result = pthread_cond_broadcast(&PSemaphore->cond);
+    if (broadcast_result != 0) {
+        fprintf(stderr, "Error: failed to broadcast condition variable\n");
+        exit(1);
+    }
+    
+    // Unlock the mutex to allow other threads to access the shared data
     UNLOCK_MUTEX(&PSemaphore->mutex);
 }
+
 
 // Waits on the semaphore until its value is 1
 void semaphore_wait(Psemaphore PSemaphore) {
