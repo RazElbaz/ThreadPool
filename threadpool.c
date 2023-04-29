@@ -409,7 +409,6 @@ void decrement_working_count(ThreadPool* Pthreadpool) {
 }
 
 
-
 void set_thread_name(pthread_t thread_id) {
 	/*
 	* This function sets the name of the specified thread using its thread ID.
