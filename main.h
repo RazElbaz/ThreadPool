@@ -23,3 +23,9 @@ void wait_for_data_index(Pinput data);
 void process_data(Pinput data);
 // The task that will be executed by the threadpool
 void new_task(void *arg);
+// Helper function to allocate and read data from stdin
+Pinput allocate_and_read_data();
+// Helper function to initialize the thread pool
+threadpool initialize_threadpool();
+// Helper function to parse the encryption key and mode from command-line arguments
+void parse_arguments(int argc, char *argv[]);

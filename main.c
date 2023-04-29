@@ -64,10 +64,9 @@ void new_task(void *arg) {
 }
 
 
-int main(int argc, char *argv[]) {
-    
-
-    programData.key = atoi(argv[1]); // Parse the encryption key and the encryption/decryption mode
+// Helper function to parse the encryption key and mode from command-line arguments
+void parse_arguments(int argc, char *argv[]) {
+    programData.key = atoi(argv[1]);
     programData.mode = argv[2][1];
     programData.current_index = 0;
     programData.data_index = 0;
@@ -76,33 +75,52 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Usage: %s <key> <-e/-d>\n", argv[0]);
         exit(1);
     }
-
-
+    // Check if the encryption/decryption mode is valid
     if (programData.mode != 'e' && programData.mode != 'd') {
         fprintf(stderr, "Invalid mode: %c, must be -e or -d\n", programData.mode);
         exit(1);
     }
+}
 
-    // Initialize the thread pool with the number of available CPUs
+// Helper function to initialize the thread pool
+threadpool initialize_threadpool() {
     int num_threads = sysconf(_SC_NPROCESSORS_ONLN);
-    threadpool thpool = threadpool_init(num_threads);
+    return threadpool_init(num_threads);
+}
+
+// Helper function to allocate and read data from stdin
+Pinput allocate_and_read_data() {
+    Pinput data = (Pinput)calloc(1, sizeof(data));
+    if (!data) {
+        perror("calloc");
+        exit(1);
+    }
+    data->index = programData.current_index;
+    data->value = (char *)malloc(MAX_DATA_COUNT);
+    if (!data->value) {
+        perror("malloc");
+        free(data);
+        exit(1);
+    }
+    if (!fgets(data->value, MAX_DATA_COUNT, stdin)) {
+        free(data->value);
+        free(data);
+        return NULL;
+    }
+    return data;
+}
+
+// The main function
+int main(int argc, char *argv[]) {
+    parse_arguments(argc, argv);
+
+    threadpool thpool = initialize_threadpool();
 
     // Read data from stdin and add tasks to the thread pool
     while (1) {
-        Pinput data = (Pinput) calloc(1, sizeof(data));
-        if (!data) {
-            perror("calloc");
-            exit(1);
-        }
-        data->index = programData.current_index;
-        data->value = (char *) malloc(MAX_DATA_COUNT);
-        if (!data->value) {
-            perror("malloc");
-            free(data);
-            exit(1);
-        }
-        if (!fgets(data->value, MAX_DATA_COUNT, stdin)) {
-            break;
+        Pinput data = allocate_and_read_data();
+        if (data == NULL) {
+            break; // End of input, break out of the loop
         }
         threadpool_new_task(thpool, new_task, data);
         programData.current_index++;
@@ -111,5 +129,6 @@ int main(int argc, char *argv[]) {
     // Wait for all tasks to complete and destroy the thread pool
     threadpool_wait(thpool);
     threadpool_destroy(thpool);
+
     return 0;
 }
