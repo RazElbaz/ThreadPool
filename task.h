@@ -23,6 +23,7 @@ int initialize_semaphore(PTaskQueue PTask) ;
 
 // Helper function to clean up allocated memory when mutex initialization fails
 void cleanup_memory(PTaskQueue PTask);
+
 // Helper function to release lock on mutex
 void release_lock(PTaskQueue PTask);
 
@@ -52,8 +53,10 @@ int acquire_mutex_lock(PTaskQueue PTask);
 
 // Checks if the task queue is empty
 int is_queue_empty(PTaskQueue PTask);
+
 // Updates the head, tail, and size of the task queue when it has only one task
 void update_queue_single_task(PTaskQueue PTask);
+
 /*Destroys a TaskQueue and frees all memory associated with it. It takes a pointer to a TaskQueue as an argument.*/
 void  TaskQueue_destroy(PTaskQueue PTask);
 
