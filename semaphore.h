@@ -33,7 +33,7 @@ void release_all_semaphores(Psemaphore PSemaphore);
 int semaphore_get_value(Psemaphore PSemaphore);
 
 // Function to decrement the value of a semaphore without waiting
-int semaphore_try_wait(Psemaphore PSemaphore);
+int semaphore_try_decrement(Psemaphore PSemaphore);
 
 // Function to decrement the value of a semaphore and wait if the value is currently 0 (i.e. wait)
 void semaphore_wait(Psemaphore PSemaphore);

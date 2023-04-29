@@ -108,32 +108,43 @@ void semaphore_wait(Psemaphore PSemaphore) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
-    // Lock the mutex
+    
+    // Lock the mutex to ensure exclusive access to shared data
     LOCK_MUTEX(&PSemaphore->mutex);
+    
     // Increment the count of waiting threads
     PSemaphore->count++;
-    // Wait on the condition variable until semaphore value is 1
+    
+    // Wait on the condition variable until the semaphore value is 1
     while (PSemaphore->value != 1) {
-        pthread_cond_wait(&PSemaphore->cond, &PSemaphore->mutex);
+        int wait_result = pthread_cond_wait(&PSemaphore->cond, &PSemaphore->mutex);
+        if (wait_result != 0) {
+            fprintf(stderr, "Error: failed to wait on condition variable\n");
+            exit(1);
+        }
     }
+    
     // Decrease the count of waiting threads
     PSemaphore->count--;
+    
     // Set semaphore value to 0
     PSemaphore->value = 0;
-    // Unlock the mutex
+    
+    // Unlock the mutex to allow other threads to access the shared data
     UNLOCK_MUTEX(&PSemaphore->mutex);
 }
 
+
 // Function to decrement the value of a semaphore without waiting
-int semaphore_try_wait(Psemaphore PSemaphore) {
+int semaphore_try_decrement(Psemaphore PSemaphore) {
     LOCK_MUTEX(&(PSemaphore->mutex));
     if (PSemaphore->value > 0) {
         PSemaphore->value--;
         UNLOCK_MUTEX(&(PSemaphore->mutex));
-        return 0;
+        return 0;  // Successfully decremented the semaphore
     } else {
         UNLOCK_MUTEX(&(PSemaphore->mutex));
-        return -1;
+        return -1; // Semaphore value was already 0, unable to decrement
     }
 }
 // Function to get the current value of the semaphore
@@ -143,6 +154,7 @@ int semaphore_get_value(Psemaphore PSemaphore) {
     UNLOCK_MUTEX(&(PSemaphore->mutex));
     return value;
 }
+
 // Destroys the semaphore and frees any associated resources
 void semaphore_destroy(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
@@ -150,11 +162,14 @@ void semaphore_destroy(Psemaphore PSemaphore) {
         fprintf(stderr, "Error: semaphore pointer is NULL\n");
         exit(1);
     }
+
     // Destroy the mutex and check for errors
     int mutex_destroy_result = pthread_mutex_destroy(&PSemaphore->mutex);
     if (mutex_destroy_result != 0) {
         fprintf(stderr, "Error: failed to destroy condition variable\n");
         exit(1);
     }
+
 }
+
 
