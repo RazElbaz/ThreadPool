@@ -10,12 +10,12 @@ typedef struct task {
 
 /*struct TaskQueue: A structure that represents a queue of tasks. It contains a mutex to synchronize access to the queue, pointers to the head and tail of the queue, a semaphore to signal when there are tasks in the queue, and the number of tasks in the queue.*/
 typedef struct TaskQueue {
-	int size;    // Number of tasks in the queue
-	Ptask tail;    // Pointer to the tail (last) task in the queue
-	Ptask head;    // Pointer to the head (first) task in the queue    
-    Psemaphore has_tasks;    // Semaphore to signal when there are tasks in the queue
-	pthread_mutex_t mutex;    // Mutex to synchronize access to the queue
-    
+	int size;               // Number of tasks in the queue
+	Ptask tail;             // Pointer to the tail (last) task in the queue
+	Ptask head;             // Pointer to the head (first) task in the queue
+    Psemaphore has_tasks;   // Semaphore to signal when there are tasks in the queue
+	pthread_mutex_t mutex;  // Mutex to synchronize access to the queue
+    int max_capacity;       // Maximum capacity of the queue
 } TaskQueue, *PTaskQueue;
 
 // Helper function to initialize semaphore and return an error code if allocation fails
