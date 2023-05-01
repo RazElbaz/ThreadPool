@@ -20,11 +20,9 @@ This is a CMD tool for encrypting and decrypting data using a provided encryptio
 The goal of this tool is to implement a threadpool mechanism and synchronization to improve the performance of an encryption algorithm. The tool takes advantage of multi-threading to utilize multiple cores and process the encryption or decryption tasks concurrently.
 
 # CMD Syntax
-The tool can be used with the following syntax:
-
-##  How To Run
 Compile files first with ```make``` or ```make all``` in terminal.
-Run with:
+
+The tool can be used with the following syntax:
 
 ```coder key -e < input_file > encrypted_file```  
 ```coder key -d < encrypted_file > output_file```  
