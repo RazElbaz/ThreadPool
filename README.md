@@ -94,3 +94,21 @@ Error Handling: Robust error handling mechanisms are implemented to handle vario
 
 # Additional Information
 To achieve optimal performance, make sure your system has multiple CPU cores available. The tool is designed to utilize multi-threading and distribute the encryption/decryption tasks across multiple threads, thereby maximizing CPU utilization.
+
+# Testing: 
+
+ `cat Tortoise_Hare.txt | ./coder 2 -e > test.txt` :
+
+![Encryption](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/Encryption.png)
+
+ `cat test.txt | ./coder 2 -d > Tortoise_Hare.txt` :
+
+![Decryption](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/Decryption.png)
+
+ `cat Tortoise_Hare.txt ` :
+
+![cat](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/cat.png)
+
+ check :
+
+![check](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/check.png)
