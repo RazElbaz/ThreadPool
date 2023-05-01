@@ -76,7 +76,9 @@ Please note that the encryption algorithm provided is for demonstration purposes
 
 ```semaphore.c``` and ```semaphore.h```: These files provide the implementation and declarations of synchronization mechanisms, such as semaphores. These mechanisms are used to coordinate the execution of threads and ensure proper synchronization of shared resources.
 
-```main.c```: This file may contain the main function of the CMD TOOL. It is responsible for parsing command-line arguments, setting up the encryption or decryption process, and utilizing the threadpool mechanism to parallelize the encryption/decryption operations. The ```main.h``` file contains function declarations, data structures, and any necessary constants or macros used in the ```main.c``` file.
+```main.c```: This file may contain the main function of the CMD TOOL. It is responsible for parsing command-line arguments, setting up the encryption or decryption process, and utilizing the threadpool mechanism to parallelize the encryption/decryption operations.
+
+```main.h``` header file defines the necessary data structures, function prototypes, and global variables to be used in the main.c file, which implements the logic for the CMD TOOL, including reading input, setting up encryption or decryption, utilizing the threadpool, and handling the output.
 
 
 # Features
