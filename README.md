@@ -130,7 +130,9 @@ The `nc -l 9090` command in one terminal and the `netstat -tuln` command in anot
 ![socket-dec](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/socket-dec.png)
 
 # Testing - pipe: 
+`cat myfile.txt | ./coder 2 -e > encripted_file.txt`
+![piping](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/piping.png)
 
-The `cat encripted_file.txt | ./coder 2 -d > your_original_file.txt`
+`cat encripted_file.txt | ./coder 2 -d > your_original_file.txt`
 
 ![pipe](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/pipe.png)
