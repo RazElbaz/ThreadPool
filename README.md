@@ -124,7 +124,7 @@ The `nc -l 9090` command in one terminal and the `netstat -tuln` command in anot
 ![connect](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/connect.png)
 
 `./coder 2 -e < Tortoise_Hare.txt | nc localhost 9090`
-![socket-dec](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/socket-dec.png)
+![socket-dec](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/socket-enc.png)
 
 `./coder 2 -d < test.txt | nc localhost 9090`
 ![socket-dec](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/socket-dec.png)
