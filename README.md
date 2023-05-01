@@ -66,5 +66,16 @@ Note: Replace 2 with the actual encryption key.
 
 Please note that the encryption algorithm provided is for demonstration purposes only and may not be suitable for secure encryption requirements.
 
+# Features
+Encryption and Decryption: The tool supports both encryption and decryption of data. You can specify the encryption or decryption mode using command-line flags.
+
+Multi-threading: The tool utilizes a threadpool mechanism to distribute the encryption or decryption tasks across multiple threads. This allows for concurrent processing and improved performance on multi-core systems.
+
+Input and Output Flexibility: The tool supports input from various sources, including file input, piping from other commands, and standard input. Similarly, the output can be redirected to files or piped to other commands for further processing.
+
+Command-Line Interface: The tool provides a command-line interface with intuitive syntax and options for specifying encryption keys, input sources, and output destinations.
+
+Error Handling: Robust error handling mechanisms are implemented to handle various scenarios, such as invalid input, file read/write errors, and memory allocation failures. Clear and informative error messages are provided to assist users in troubleshooting.
+
 # Additional Information
 To achieve optimal performance, make sure your system has multiple CPU cores available. The tool is designed to utilize multi-threading and distribute the encryption/decryption tasks across multiple threads, thereby maximizing CPU utilization.
