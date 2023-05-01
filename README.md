@@ -118,3 +118,5 @@ To achieve optimal performance, make sure your system has multiple CPU cores ava
 ![check](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/check.png)
 
 # Testing - socket: 
+
+The `nc -l 8080` command in one terminal and the `netstat -tuln` command in another terminal 
