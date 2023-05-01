@@ -128,3 +128,9 @@ The `nc -l 9090` command in one terminal and the `netstat -tuln` command in anot
 
 `./coder 2 -d < test.txt | nc localhost 9090`
 ![socket-dec](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/socket-dec.png)
+
+# Testing - pipe: 
+
+The `cat encripted_file.txt | ./coder 2 -d > your_original_file.txt`
+
+![pipe](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/pipe.png)
