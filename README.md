@@ -113,7 +113,7 @@ To achieve optimal performance, make sure your system has multiple CPU cores ava
 
 ![cat](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/cat.png)
 
- check :
+ *check* :
 
 ![check](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/check.png)
 
@@ -124,13 +124,17 @@ The `nc -l 9090` command in one terminal and the `netstat -tuln` command in anot
 ![connect](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/connect.png)
 
 `./coder 2 -e < Tortoise_Hare.txt | nc localhost 9090`
+
 ![socket-dec](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/socket-enc.png)
 
 `./coder 2 -d < test.txt | nc localhost 9090`
+
 ![socket-dec](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/socket-dec.png)
 
 # Testing - pipe: 
+
 `cat myfile.txt | ./coder 2 -e > encripted_file.txt`
+
 ![piping](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/piping.png)
 
 `cat encripted_file.txt | ./coder 2 -d > your_original_file.txt`
