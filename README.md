@@ -66,6 +66,19 @@ Note: Replace 2 with the actual encryption key.
 
 Please note that the encryption algorithm provided is for demonstration purposes only and may not be suitable for secure encryption requirements.
 
+# Here's an overview of the files and their roles:
+
+```libCodec.so```: This is a shared library (SO) compiled for x86 architecture. It contains two functions, "encode" and "decode", which are likely used for encryption and decryption operations.
+
+```threadpool.c``` and ```threadpool.h```: These files contain the implementation and declarations of the threadpool mechanism. The threadpool is responsible for managing a pool of threads and assigning tasks to them in a parallel manner.
+
+```task.c``` and ```task.h```: These may define the structure and functions related to tasks that can be executed by the threadpool. Tasks represent units of work that need to be performed in parallel.
+
+```semaphore.c``` and ```semaphore.h```: These files provide the implementation and declarations of synchronization mechanisms, such as semaphores. These mechanisms are used to coordinate the execution of threads and ensure proper synchronization of shared resources.
+
+```main.c``: This file may contain the main function of the CMD TOOL. It is responsible for parsing command-line arguments, setting up the encryption or decryption process, and utilizing the threadpool mechanism to parallelize the encryption/decryption operations.
+
+
 # Features
 Encryption and Decryption: The tool supports both encryption and decryption of data. You can specify the encryption or decryption mode using command-line flags.
 
