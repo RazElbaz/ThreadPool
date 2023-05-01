@@ -80,6 +80,10 @@ Please note that the encryption algorithm provided is for demonstration purposes
 
 ```main.h``` header file defines the necessary data structures, function prototypes, and global variables to be used in the main.c file, which implements the logic for the CMD TOOL, including reading input, setting up encryption or decryption, utilizing the threadpool, and handling the output.
 
+`myfile.txt` file with 1385 original characters
+`encrypted_file.txt` Encrypted file of `myfile.txt` with key=2
+`Tortoise_Hare.tx`t file with a story to further test
+`test.txt` Encrypted file of  `Tortoise_Hare.txt` with key=2
 
 # Features
 Encryption and Decryption: The tool supports both encryption and decryption of data. You can specify the encryption or decryption mode using command-line flags.
@@ -95,7 +99,7 @@ Error Handling: Robust error handling mechanisms are implemented to handle vario
 # Additional Information
 To achieve optimal performance, make sure your system has multiple CPU cores available. The tool is designed to utilize multi-threading and distribute the encryption/decryption tasks across multiple threads, thereby maximizing CPU utilization.
 
-# Testing: 
+# Testing - Files: 
 
  `cat Tortoise_Hare.txt | ./coder 2 -e > test.txt` :
 
@@ -112,3 +116,5 @@ To achieve optimal performance, make sure your system has multiple CPU cores ava
  check :
 
 ![check](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/check.png)
+
+# Testing - socket: 
