@@ -119,4 +119,12 @@ To achieve optimal performance, make sure your system has multiple CPU cores ava
 
 # Testing - socket: 
 
-The `nc -l 8080` command in one terminal and the `netstat -tuln` command in another terminal 
+The `nc -l 9090` command in one terminal and the `netstat -tuln` command in another terminal 
+
+![connect](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/connect.png)
+
+`./coder 2 -e < Tortoise_Hare.txt | nc localhost 9090`
+![socket-dec](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/socket-dec.png)
+
+`./coder 2 -d < test.txt | nc localhost 9090`
+![socket-dec](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/socket-dec.png)
