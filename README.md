@@ -17,7 +17,7 @@ This is a CMD tool for encrypting and decrypting data using a provided encryptio
 
 # Introduction:
   
-The goal is to implement a threadpool mechanism, and implement syncronization.
+The goal of this tool is to implement a threadpool mechanism and synchronization to improve the performance of an encryption algorithm. The tool takes advantage of multi-threading to utilize multiple cores and process the encryption or decryption tasks concurrently.
 
 # CMD Syntax
 The tool can be used with the following syntax:
@@ -62,5 +62,9 @@ My tools will take input in sdtIn and write the encrypted/decrypted data to stdO
 ```./coder 2 -d < encripted_file.txt  > check.txt```  
 ```cat encripted_file.txt | ./coder 2 -d > your_original_file.txt```
 
+Note: Replace 2 with the actual encryption key.
 
+Please note that the encryption algorithm provided is for demonstration purposes only and may not be suitable for secure encryption requirements.
 
+# Additional Information
+To achieve optimal performance, make sure your system has multiple CPU cores available. The tool is designed to utilize multi-threading and distribute the encryption/decryption tasks across multiple threads, thereby maximizing CPU utilization.
