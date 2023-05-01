@@ -19,7 +19,8 @@ This is a CMD tool for encrypting and decrypting data using a provided encryptio
   
 The goal is to implement a threadpool mechanism, and implement syncronization.
 
-# The CMD syntax:
+# CMD Syntax
+The tool can be used with the following syntax:
 
 ```coder key -e < input_file > encrypted_file```  
 ```coder key -d < encrypted_file > output_file```  
@@ -38,20 +39,17 @@ The goal is to implement a threadpool mechanism, and implement syncronization.
 
 To use the program, you would replace key with the actual encryption/decryption key and specify the appropriate files for input, output, and piping, depending on your specific use case.
 
-### Input/Output
+# Input/Output
 The tool reads input data from stdin and writes the encrypted/decrypted data to stdout. You can use shell redirection and piping to provide input data and capture the output.
 
-### Performance Considerations
+# Performance Considerations
 The encryption algorithm provided in the shared library is not optimized and takes approximately 5 milliseconds to process each character. To maximize CPU utilization on multi-core systems, the tool utilizes a threadpool mechanism for parallel processing.
 
-# The task in details:   
-All the files given to me are in the ```threadPoolTask``` folder.  
-I was given a shared library (SO), compiled for x86, with two functions: "encode" and "decode".
-A simple basic_main is also included to demonstrate the functionality of the library.
-Since the encryption algorithm is done by a novice student, it will take 5ms for each char, which is not
-Capable of handling more than 1k (1024) bytes of data. More than that will be ignored.
-I had to implement a CMD TOOL that would use the algorithm above.
-By the cmd tool we mean, that my executable will receive its work data from stdIn, and put the output to stdOut.
+# Task Details   
+
+All the required files for this task can be found in the ```threadPoolTask``` folder. The provided shared library (SO) includes two functions: encode and decode. Additionally, a simple basic_main is included to demonstrate the functionality of the library. The encryption algorithm is not optimized and can handle a maximum of 1k (1024) bytes of data. Anything beyond that will be ignored.
+
+The goal of this task was to implement a CMD TOOL that uses the provided encryption algorithm. The tool reads input data from stdin and writes the encrypted/decrypted data to stdout. The -e and -d flags are used for encryption and decryption, respectively
 
 
 My tools will take input in sdtIn and write the encrypted/decrypted data to stdOut.
