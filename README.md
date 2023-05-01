@@ -113,7 +113,7 @@ To achieve optimal performance, make sure your system has multiple CPU cores ava
 
 ![cat](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/cat.png)
 
- *check* :
+ **check** :
 
 ![check](https://github.com/RazElbaz/ThreadPool/blob/main/pictures/check.png)
 
