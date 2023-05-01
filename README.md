@@ -22,6 +22,10 @@ The goal of this tool is to implement a threadpool mechanism and synchronization
 # CMD Syntax
 The tool can be used with the following syntax:
 
+##  How To Run
+Compile files first with ```make``` or ```make all``` in terminal.
+Run with:
+
 ```coder key -e < input_file > encrypted_file```  
 ```coder key -d < encrypted_file > output_file```  
 ```pipe | coder key -e > encrypted_file```  
