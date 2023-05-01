@@ -38,6 +38,11 @@ The goal is to implement a threadpool mechanism, and implement syncronization.
 
 To use the program, you would replace key with the actual encryption/decryption key and specify the appropriate files for input, output, and piping, depending on your specific use case.
 
+### Input/Output
+The tool reads input data from stdin and writes the encrypted/decrypted data to stdout. You can use shell redirection and piping to provide input data and capture the output.
+
+### Performance Considerations
+The encryption algorithm provided in the shared library is not optimized and takes approximately 5 milliseconds to process each character. To maximize CPU utilization on multi-core systems, the tool utilizes a threadpool mechanism for parallel processing.
 
 # The task in details:   
 All the files given to me are in the ```threadPoolTask``` folder.  
@@ -58,4 +63,6 @@ My tools will take input in sdtIn and write the encrypted/decrypted data to stdO
 ```./coder 2 -e < myfile.txt > encripted_file.txt```  
 ```./coder 2 -d < encripted_file.txt  > check.txt```  
 ```cat encripted_file.txt | ./coder 2 -d > your_original_file.txt```
+
+
 
