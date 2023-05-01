@@ -3,41 +3,6 @@
 pthread_mutex_t hold_mutex = PTHREAD_MUTEX_INITIALIZER;  // Mutex for hold condition
 pthread_cond_t hold_cond = PTHREAD_COND_INITIALIZER;  // Condition variable for hold condition
 
-// Lock the given mutex
-void lock_mutex(pthread_mutex_t* mutex) {
-    /*
-    Locks the given mutex.
-
-    Parameters:
-        - mutex: Pointer to the mutex to be locked
-
-    Note: The function handles error checking and exits the program if an error occurs.
-    */
-
-    int result = pthread_mutex_lock(mutex);
-    if (result != 0) {
-        perror("lock_mutex: pthread_mutex_lock");
-        exit(1);
-    }
-}
-
-// Unlock the given mutex
-void unlock_mutex(pthread_mutex_t* mutex) {
-    /*
-    Unlocks the given mutex.
-
-    Parameters:
-        - mutex: Pointer to the mutex to be unlocked
-
-    Note: The function handles error checking and exits the program if an error occurs.
-    */
-
-    int result = pthread_mutex_unlock(mutex);
-    if (result != 0) {
-        perror("unlock_mutex: pthread_mutex_unlock");
-        exit(1);
-    }
-}
 
 
 struct ThreadPool* threadpool_init(int num_threads);
@@ -75,8 +40,6 @@ struct ThreadPool* threadpool_init(int num_threads) {
 
     return Pthreadpool; // Return the initialized thread pool
 }
-
-
 
 // Allocate memory for the thread pool and initialize it
 PThreadPool allocateThreadPool(int num_threads) {
@@ -131,7 +94,6 @@ PThreadPool allocateThreadPool(int num_threads) {
     return Pthreadpool;
 }
 
-
 void initializeThreadPool(PThreadPool Pthreadpool, int num_threads) {
     /*
     Initialize the individual threads in the thread pool.
@@ -155,7 +117,6 @@ void initializeThreadPool(PThreadPool Pthreadpool, int num_threads) {
         // Do nothing and wait until the running thread count matches the desired number of threads
     }
 }
-
 
 int threadpool_new_task(ThreadPool* Pthreadpool, void (*function)(void*), void* argument) {
     /*
@@ -202,7 +163,6 @@ int threadpool_new_task(ThreadPool* Pthreadpool, void (*function)(void*), void* 
     return 0;
 }
 
-
 void threadpool_wait(PThreadPool Pthreadpool) {
     /*
     Wait for the thread pool to finish all tasks and become idle.
@@ -228,8 +188,6 @@ void threadpool_wait(PThreadPool Pthreadpool) {
     // Unlock the thread count mutex
     unlock_mutex(&Pthreadpool->threadCountMutex);
 }
-
-
 
 void wait_for_threads_to_finish(PThreadPool Pthreadpool) {
     /*
@@ -265,19 +223,6 @@ void wait_for_threads_to_finish(PThreadPool Pthreadpool) {
 }
 
 
-void free_threads(PThreadPool Pthreadpool) {
-	/*
-	* This function frees the thread objects and threads array in the thread pool.
-	* It takes a PThreadPool pointer Pthreadpool as a parameter.
-	*/
-    int i;
-    // Free each thread object in the threads array
-    for (i = 0; i < Pthreadpool->runningThreadCount; i++) {
-        free(Pthreadpool->threads[i]); // Free the memory allocated for each thread object
-    }
-    // Free the threads array itself
-    free(Pthreadpool->threads); // Free the memory allocated for the threads array
-}
 
 void threadpool_destroy(PThreadPool Pthreadpool) {
 	/*
@@ -340,7 +285,61 @@ int thread_init(PThreadPool Pthreadpool, Pthread* PThread, int id) {
     return 0;
 }
 
+void* thread_execute(void* threadData) {
+	/* 
+	This function is executed by each thread in the thread pool to execute tasks from the task queue.
+	  It takes a void pointer to threadData as a parameter and returns a void pointer.
+ 	 threadData contains information about the thread and the thread pool it belongs to.
+	
+	Parameters:
+	threadData: Pointer to the thread data structure.
+	
+	Returns:
+		NULL.
+	*/
+    Pthread PThread = (Pthread) threadData;
+    ThreadPool* Pthreadpool = PThread->threadPoolPtr;
 
+    // Set the thread name and signal handling
+    set_thread_name(pthread_self());
+    set_up_signal_handling();
+
+    // Increment the count of running threads
+    lock_mutex(&Pthreadpool->threadCountMutex);
+    Pthreadpool->runningThreadCount += 1;
+    unlock_mutex(&Pthreadpool->threadCountMutex);
+
+    int runningThreads = RunningThreads;  // Use a local variable
+
+    while (runningThreads) {
+        // Wait for a task in the task queue
+        semaphore_wait(Pthreadpool->taskQueue.has_tasks);
+
+        // Increment the working count
+        increment_working_count(Pthreadpool);
+
+        task* task_ptr;
+        while ((task_ptr = TaskQueue_pull(&Pthreadpool->taskQueue))) {
+            // Execute tasks pulled from the task queue
+            execute_task(Pthreadpool, task_ptr);
+        }
+
+        // Decrement the working count
+        decrement_working_count(Pthreadpool);
+
+        // Check if there are still running threads
+        runningThreads = RunningThreads;
+    }
+
+    // Decrement the count of running threads
+    lock_mutex(&Pthreadpool->threadCountMutex);
+    Pthreadpool->runningThreadCount--;
+    unlock_mutex(&Pthreadpool->threadCountMutex);
+
+    return NULL;
+}
+
+///////////////////////////////////////////////////////////////////helper functions////////////////////////////////////////////////////////////////////
 
 void thread_hold(int signum) {
 	/*
@@ -363,7 +362,6 @@ void thread_hold(int signum) {
     unlock_mutex(&hold_mutex); // Unlock the mutex after the loop
 }
 
-
 void execute_task(ThreadPool* Pthreadpool, task* Ptask) {
     /*
 	* This function executes a task in the thread pool.
@@ -379,7 +377,6 @@ void execute_task(ThreadPool* Pthreadpool, task* Ptask) {
     // Free the task memory
     free(Ptask); // Free the memory allocated for the task
 }
-
 
 void increment_working_count(ThreadPool* Pthreadpool) {
 	/*
@@ -449,61 +446,55 @@ void set_up_signal_handling() {
     }
 }
 
-
-void* thread_execute(void* threadData) {
-	/* 
-	This function is executed by each thread in the thread pool to execute tasks from the task queue.
-	  It takes a void pointer to threadData as a parameter and returns a void pointer.
- 	 threadData contains information about the thread and the thread pool it belongs to.
-	
-	Parameters:
-	threadData: Pointer to the thread data structure.
-	
-	Returns:
-		NULL.
+void free_threads(PThreadPool Pthreadpool) {
+	/*
+	* This function frees the thread objects and threads array in the thread pool.
+	* It takes a PThreadPool pointer Pthreadpool as a parameter.
 	*/
-    Pthread PThread = (Pthread) threadData;
-    ThreadPool* Pthreadpool = PThread->threadPoolPtr;
-
-    // Set the thread name and signal handling
-    set_thread_name(pthread_self());
-    set_up_signal_handling();
-
-    // Increment the count of running threads
-    lock_mutex(&Pthreadpool->threadCountMutex);
-    Pthreadpool->runningThreadCount += 1;
-    unlock_mutex(&Pthreadpool->threadCountMutex);
-
-    int runningThreads = RunningThreads;  // Use a local variable
-
-    while (runningThreads) {
-        // Wait for a task in the task queue
-        semaphore_wait(Pthreadpool->taskQueue.has_tasks);
-
-        // Increment the working count
-        increment_working_count(Pthreadpool);
-
-        task* task_ptr;
-        while ((task_ptr = TaskQueue_pull(&Pthreadpool->taskQueue))) {
-            // Execute tasks pulled from the task queue
-            execute_task(Pthreadpool, task_ptr);
-        }
-
-        // Decrement the working count
-        decrement_working_count(Pthreadpool);
-
-        // Check if there are still running threads
-        runningThreads = RunningThreads;
+    int i;
+    // Free each thread object in the threads array
+    for (i = 0; i < Pthreadpool->runningThreadCount; i++) {
+        free(Pthreadpool->threads[i]); // Free the memory allocated for each thread object
     }
-
-    // Decrement the count of running threads
-    lock_mutex(&Pthreadpool->threadCountMutex);
-    Pthreadpool->runningThreadCount--;
-    unlock_mutex(&Pthreadpool->threadCountMutex);
-
-    return NULL;
+    // Free the threads array itself
+    free(Pthreadpool->threads); // Free the memory allocated for the threads array
 }
 
+// Lock the given mutex
+void lock_mutex(pthread_mutex_t* mutex) {
+    /*
+    Locks the given mutex.
+
+    Parameters:
+        - mutex: Pointer to the mutex to be locked
+
+    Note: The function handles error checking and exits the program if an error occurs.
+    */
+
+    int result = pthread_mutex_lock(mutex);
+    if (result != 0) {
+        perror("lock_mutex: pthread_mutex_lock");
+        exit(1);
+    }
+}
+
+// Unlock the given mutex
+void unlock_mutex(pthread_mutex_t* mutex) {
+    /*
+    Unlocks the given mutex.
+
+    Parameters:
+        - mutex: Pointer to the mutex to be unlocked
+
+    Note: The function handles error checking and exits the program if an error occurs.
+    */
+
+    int result = pthread_mutex_unlock(mutex);
+    if (result != 0) {
+        perror("unlock_mutex: pthread_mutex_unlock");
+        exit(1);
+    }
+}
 
 
 

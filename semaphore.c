@@ -33,18 +33,6 @@ void semaphore_init(semaphore *PSemaphore, int value) {
     PSemaphore->count = 0;
 }
 
-// Resets a semaphore to 0
-void semaphore_reset(Psemaphore PSemaphore) {
-    // Check if semaphore pointer is NULL
-    if (PSemaphore == NULL) {
-        fprintf(stderr, "Error: semaphore pointer is NULL\n");
-        exit(1);
-    }
-    // Reset semaphore to 0
-    semaphore_init(PSemaphore, 0);
-}
-
-
 // Signals the semaphore
 void release_semaphore(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
@@ -74,7 +62,6 @@ void release_semaphore(Psemaphore PSemaphore) {
     UNLOCK_MUTEX(&PSemaphore->mutex);
 }
 
-
 // Signals all waiting threads on the semaphore
 void release_all_semaphores(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
@@ -99,7 +86,6 @@ void release_all_semaphores(Psemaphore PSemaphore) {
     // Unlock the mutex to allow other threads to access the shared data
     UNLOCK_MUTEX(&PSemaphore->mutex);
 }
-
 
 // Waits on the semaphore until its value is 1
 void semaphore_wait(Psemaphore PSemaphore) {
@@ -134,27 +120,6 @@ void semaphore_wait(Psemaphore PSemaphore) {
     UNLOCK_MUTEX(&PSemaphore->mutex);
 }
 
-
-// Function to decrement the value of a semaphore without waiting
-int semaphore_try_decrement(Psemaphore PSemaphore) {
-    LOCK_MUTEX(&(PSemaphore->mutex));
-    if (PSemaphore->value > 0) {
-        PSemaphore->value--;
-        UNLOCK_MUTEX(&(PSemaphore->mutex));
-        return 0;  // Successfully decremented the semaphore
-    } else {
-        UNLOCK_MUTEX(&(PSemaphore->mutex));
-        return -1; // Semaphore value was already 0, unable to decrement
-    }
-}
-// Function to get the current value of the semaphore
-int semaphore_get_value(Psemaphore PSemaphore) {
-    LOCK_MUTEX(&(PSemaphore->mutex));
-    int value = PSemaphore->value;
-    UNLOCK_MUTEX(&(PSemaphore->mutex));
-    return value;
-}
-
 // Destroys the semaphore and frees any associated resources
 void semaphore_destroy(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
@@ -172,4 +137,37 @@ void semaphore_destroy(Psemaphore PSemaphore) {
 
 }
 
+///////////////////////////////////////////////////////////////////helper functions////////////////////////////////////////////////////////////////////
+
+// Function to decrement the value of a semaphore without waiting
+int semaphore_try_decrement(Psemaphore PSemaphore) {
+    LOCK_MUTEX(&(PSemaphore->mutex));
+    if (PSemaphore->value > 0) {
+        PSemaphore->value--;
+        UNLOCK_MUTEX(&(PSemaphore->mutex));
+        return 0;  // Successfully decremented the semaphore
+    } else {
+        UNLOCK_MUTEX(&(PSemaphore->mutex));
+        return -1; // Semaphore value was already 0, unable to decrement
+    }
+}
+
+// Function to get the current value of the semaphore
+int semaphore_get_value(Psemaphore PSemaphore) {
+    LOCK_MUTEX(&(PSemaphore->mutex));
+    int value = PSemaphore->value;
+    UNLOCK_MUTEX(&(PSemaphore->mutex));
+    return value;
+}
+
+// Resets a semaphore to 0
+void semaphore_reset(Psemaphore PSemaphore) {
+    // Check if semaphore pointer is NULL
+    if (PSemaphore == NULL) {
+        fprintf(stderr, "Error: semaphore pointer is NULL\n");
+        exit(1);
+    }
+    // Reset semaphore to 0
+    semaphore_init(PSemaphore, 0);
+}
 

@@ -1,34 +1,5 @@
 #include "task.h"
 
-// Helper function to initialize semaphore and return an error code if allocation fails
-int initialize_semaphore(PTaskQueue PTask) {
-    PTask->has_tasks = (Psemaphore)calloc(1, sizeof(semaphore));
-    if (PTask->has_tasks == NULL) {
-        return -1;
-    }
-    semaphore_init(PTask->has_tasks, 0);
-    return 0;
-}
-
-// Helper function to clean up allocated memory when mutex initialization fails
-void cleanup_memory(PTaskQueue PTask) {
-    free(PTask->has_tasks);
-    PTask->has_tasks = NULL;
-}
-
-// Helper function to acquire lock on mutex and return an error code if lock fails
-int acquire_lock(PTaskQueue PTask) {
-    int mutex_lock_result = pthread_mutex_lock(&PTask->mutex);
-    if (mutex_lock_result != 0) {
-        return -1;
-    }
-    return 0;
-}
-
-// Helper function to release lock on mutex
-void release_lock(PTaskQueue PTask) {
-    pthread_mutex_unlock(&PTask->mutex);
-}
 
 // Function to initialize a task queue with size 0 and empty head and tail
 int TaskQueue_init(PTaskQueue PTask) {
@@ -83,7 +54,73 @@ void TaskQueue_push(PTaskQueue PTask, Ptask PTask_new) {
     release_lock(PTask); // Release the lock
 }
 
+// Function to pull a task from the task queue
+Ptask TaskQueue_pull(PTaskQueue PTask) {
+    // Check if the provided task queue pointer is NULL
+    if (PTask == NULL) {
+        return NULL; // Return NULL to indicate an error condition
+    }
 
+    int mutex_lock_result = acquire_mutex_lock(PTask); // Acquire the mutex lock for thread-safety
+    if (mutex_lock_result != 0) {
+        return NULL; // Return NULL if mutex lock acquisition fails
+    }
+
+    Ptask curr_task = pull_task(PTask); // Pull a task from the task queue
+
+    release_mutex_lock(PTask); // Release the mutex lock
+
+    return curr_task; // Return the pulled task
+}
+
+// Pulls a task from the head of the task queue
+Ptask pull_task(PTaskQueue PTask) {
+    Ptask curr_task = PTask->head; // Store the current head of the task queue
+    
+    // Check if the task queue is empty
+    if (is_queue_empty(PTask)) {
+        return NULL; // If empty, return NULL to indicate no task is available
+    }
+    
+    // Check if the task queue has only one task
+    if (PTask->size == 1) {
+        update_queue_single_task(PTask); // If only one task, update the queue accordingly
+    } else {
+        update_queue_multiple_tasks(PTask, curr_task); // If multiple tasks, update the queue accordingly
+    }
+    
+    return curr_task; // Return the pulled task
+}
+///////////////////////////////////////////////////////////////////helper functions////////////////////////////////////////////////////////////////////
+// Helper function to initialize semaphore and return an error code if allocation fails
+int initialize_semaphore(PTaskQueue PTask) {
+    PTask->has_tasks = (Psemaphore)calloc(1, sizeof(semaphore));
+    if (PTask->has_tasks == NULL) {
+        return -1;
+    }
+    semaphore_init(PTask->has_tasks, 0);
+    return 0;
+}
+
+// Helper function to clean up allocated memory when mutex initialization fails
+void cleanup_memory(PTaskQueue PTask) {
+    free(PTask->has_tasks);
+    PTask->has_tasks = NULL;
+}
+
+// Helper function to acquire lock on mutex and return an error code if lock fails
+int acquire_lock(PTaskQueue PTask) {
+    int mutex_lock_result = pthread_mutex_lock(&PTask->mutex);
+    if (mutex_lock_result != 0) {
+        return -1;
+    }
+    return 0;
+}
+
+// Helper function to release lock on mutex
+void release_lock(PTaskQueue PTask) {
+    pthread_mutex_unlock(&PTask->mutex);
+}
 
 // Acquires the lock on the mutex and returns an error code if it fails
 int acquire_mutex_lock(PTaskQueue PTask) {
@@ -113,45 +150,6 @@ void update_queue_multiple_tasks(PTaskQueue PTask, Ptask curr_task) {
     PTask->size--;
     release_semaphore(PTask->has_tasks);
 }
-
-// Pulls a task from the head of the task queue
-Ptask pull_task(PTaskQueue PTask) {
-    Ptask curr_task = PTask->head; // Store the current head of the task queue
-    
-    // Check if the task queue is empty
-    if (is_queue_empty(PTask)) {
-        return NULL; // If empty, return NULL to indicate no task is available
-    }
-    
-    // Check if the task queue has only one task
-    if (PTask->size == 1) {
-        update_queue_single_task(PTask); // If only one task, update the queue accordingly
-    } else {
-        update_queue_multiple_tasks(PTask, curr_task); // If multiple tasks, update the queue accordingly
-    }
-    
-    return curr_task; // Return the pulled task
-}
-
-// Function to pull a task from the task queue
-Ptask TaskQueue_pull(PTaskQueue PTask) {
-    // Check if the provided task queue pointer is NULL
-    if (PTask == NULL) {
-        return NULL; // Return NULL to indicate an error condition
-    }
-
-    int mutex_lock_result = acquire_mutex_lock(PTask); // Acquire the mutex lock for thread-safety
-    if (mutex_lock_result != 0) {
-        return NULL; // Return NULL if mutex lock acquisition fails
-    }
-
-    Ptask curr_task = pull_task(PTask); // Pull a task from the task queue
-
-    release_mutex_lock(PTask); // Release the mutex lock
-
-    return curr_task; // Return the pulled task
-}
-
 
 // Frees a single task from the queue
 void free_task(PTaskQueue PTask) {
