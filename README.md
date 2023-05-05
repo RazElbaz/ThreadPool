@@ -62,7 +62,7 @@ My tools will take input in sdtIn and write the encrypted/decrypted data to stdO
  ```./coder 2 -e < myfile.txt > encripted_file.txt```    
  ```./coder 2 -d < encripted_file.txt  > test.txt ```  
  ```cat encripted_file.txt | ./coder 2 -d > your_original_file.txt```  
-  ```./coder 2 -e < myfile.txt > encripted_file.txt```   
+   
   
 Note: Replace 2 with the actual encryption key.  
 
@@ -70,7 +70,7 @@ Note: Replace 2 with the actual encryption key.
 ```./coder 20 -e < myfile.txt > encripted_file.txt```  
 ```./coder 20 -d < encripted_file.txt  > check.txt```  
 ```cat encripted_file.txt | ./coder 20 -d > your_original_file.txt```  
- ```./coder 20 -e < myfile.txt > encripted_file.txt```   
+
 
 *Example 3:*  
  Encrypting the file and displaying the encrypted data on the console:     
