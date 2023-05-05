@@ -58,6 +58,7 @@ My tools will take input in sdtIn and write the encrypted/decrypted data to stdO
 "-e" and "-d" flags will be used for encryption and decryption accordingly.
 
 # Example of use:
+*Example 1: 
  ```./coder 2 -e < myfile.txt > encripted_file.txt```   
  ```./coder 2 -d < encripted_file.txt  > test.txt ```
  ```cat encripted_file.txt | ./coder 2 -d > your_original_file.txt```
@@ -65,16 +66,21 @@ My tools will take input in sdtIn and write the encrypted/decrypted data to stdO
   
 Note: Replace 2 with the actual encryption key.
 
+*Example 2:
 ```./coder 20 -e < myfile.txt > encripted_file.txt```  
 ```./coder 20 -d < encripted_file.txt  > check.txt```  
 ```cat encripted_file.txt | ./coder 20 -d > your_original_file.txt```
  ```./coder 20 -e < myfile.txt > encripted_file.txt```  
 
+*Example 3:
  Encrypting the file and displaying the encrypted data on the console:     
  ```./coder 5 -e < myfile.txt```  
   Encrypting the file and saving the encrypted data to a file  
 ```./coder 5 -e < myfile.txt > encrypted_file.txt```  
-
+Decrypting the encrypted file and displaying the decrypted data on the console  
+```./coder 5 -d < encrypted_file.txt```  
+Decrypting the encrypted file and saving the decrypted data to a file
+```./coder 5 -d < encrypted_file.txt > decrypted_file.txt```
 
 Please note that the encryption algorithm provided is for demonstration purposes only and may not be suitable for secure encryption requirements.
 
