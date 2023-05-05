@@ -84,7 +84,7 @@ Decrypting the encrypted file and saving the decrypted data to a file
 
 *Example 4:*  
 Encrypting input from a pipe and saving the encrypted data to a file    
- ```echo "Hello, World!" | ./coder 3 -e > encrypted.txt```
+ ```echo "Hello, World!" | ./coder 3 -e > encrypted.txt```  
 Decrypting input from a file and displaying the decrypted data on the console  
 ```./coder 3 -d < encrypted.txt```
 
