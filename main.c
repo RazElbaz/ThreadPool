@@ -8,10 +8,10 @@
 #include <unistd.h> 
 #include <stdbool.h>
 #include "main.h"
-
-
 ProgramData programData;
 
+
+///////////////////////////////////////////////////////////////////helper functions////////////////////////////////////////////////////////////////////
 // Helper function to process the data (either encryption or decryption)
 void process_data(Pinput data) {
     // Check the mode and call the appropriate function
@@ -90,7 +90,6 @@ void parse_arguments(int argc, char *argv[]) {
 }
 
 
-
 // Helper function to initialize the thread pool
 threadpool initialize_threadpool() {
     int num_threads = sysconf(_SC_NPROCESSORS_ONLN);
@@ -129,6 +128,9 @@ Pinput allocate_and_read_data() {
     return data;
 }
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // The main function
 int main(int argc, char *argv[]) {
     // Parse the encryption key and mode from command-line arguments

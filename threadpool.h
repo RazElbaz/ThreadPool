@@ -73,7 +73,7 @@ void lock_mutex(pthread_mutex_t* mutex);
 struct ThreadPool* threadpool_init(int num_threads);
 
 // Function to add a new task to the thread pool
-int threadpool_new_task(ThreadPool* thpool, void (*function)(void*), void* argument);
+void threadpool_new_task(ThreadPool* thpool, void (*function)(void*), void* argument);
 
 // Function to wait for all tasks in the thread pool to finish
 void threadpool_wait(PThreadPool Pthreadpool);

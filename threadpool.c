@@ -3,23 +3,19 @@
 pthread_mutex_t hold_mutex = PTHREAD_MUTEX_INITIALIZER;  // Mutex for hold condition
 pthread_cond_t hold_cond = PTHREAD_COND_INITIALIZER;  // Condition variable for hold condition
 
-
-
 struct ThreadPool* threadpool_init(int num_threads);
 PThreadPool allocateThreadPool(int num_threads);
 void initializeThreadPool(PThreadPool Pthreadpool, int num_threads);
 
-// Initialize and set up the thread pool
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 struct ThreadPool* threadpool_init(int num_threads) {
     /*
     Initialize and set up the thread pool by allocating memory for the ThreadPool structure, initializing the thread pool, and returning the initialized thread pool.
-
     Parameters:
         - num_threads: Number of threads to allocate in the thread pool
-
     Returns:
         - Pointer to the initialized ThreadPool structure
-
     Note: The returned ThreadPool structure should be freed using the appropriate cleanup functions when no longer needed.
     */
 
@@ -41,17 +37,15 @@ struct ThreadPool* threadpool_init(int num_threads) {
     return Pthreadpool; // Return the initialized thread pool
 }
 
-// Allocate memory for the thread pool and initialize it
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 PThreadPool allocateThreadPool(int num_threads) {
     /*
     Allocate and initialize the ThreadPool structure, including the task queue and threads.
-
     Parameters:
         - num_threads: Number of threads to allocate in the thread pool
-
     Returns:
         - Pointer to the allocated and initialized ThreadPool structure
-
     Note: The returned ThreadPool structure should be freed using the appropriate cleanup functions when no longer needed.
     */
 
@@ -94,14 +88,15 @@ PThreadPool allocateThreadPool(int num_threads) {
     return Pthreadpool;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void initializeThreadPool(PThreadPool Pthreadpool, int num_threads) {
     /*
     Initialize the individual threads in the thread pool.
-    
     Parameters:
         - Pthreadpool: Pointer to the thread pool structure
         - num_threads: Number of threads to initialize
-    
+
     Note: The thread pool should be properly allocated and initialized before calling this function.
     */
 
@@ -118,7 +113,9 @@ void initializeThreadPool(PThreadPool Pthreadpool, int num_threads) {
     }
 }
 
-int threadpool_new_task(ThreadPool* Pthreadpool, void (*function)(void*), void* argument) {
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void threadpool_new_task(ThreadPool* Pthreadpool, void (*function)(void*), void* argument) {
     /*
     Add a new task to the thread pool's task queue.
     
@@ -127,30 +124,26 @@ int threadpool_new_task(ThreadPool* Pthreadpool, void (*function)(void*), void* 
         - function: Pointer to the function to be executed as a task
         - argument: Pointer to the argument to be passed to the function
     
-    Returns:
-        - 0 if the task is successfully added
-        - -1 if there was an error
-    
     Note: The function pointer and argument should be valid.
     */
 
     // Check if the thread pool pointer is valid
     if (Pthreadpool == NULL) {
         perror("Invalid thread pool pointer");
-        return -1;  // Or any appropriate error code
+        return;  
     }
 
     // Check if the function pointer is valid
     if (function == NULL) {
         perror("Invalid function pointer");
-        return -1;  // Or any appropriate error code
+        return;  
     }
 
     // Allocate memory for the new task
     task* newTask = malloc(sizeof(task));
     if (newTask == NULL) {
         perror("Failed to allocate memory");
-        return -1;  // Or any appropriate error code
+        return; 
     }
 
     // Assign the function and argument to the new task
@@ -159,9 +152,10 @@ int threadpool_new_task(ThreadPool* Pthreadpool, void (*function)(void*), void* 
 
     // Add the new task to the thread pool's task queue
     TaskQueue_push(&(Pthreadpool->taskQueue), newTask);
-
-    return 0;
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void threadpool_wait(PThreadPool Pthreadpool) {
     /*
@@ -188,6 +182,8 @@ void threadpool_wait(PThreadPool Pthreadpool) {
     // Unlock the thread count mutex
     unlock_mutex(&Pthreadpool->threadCountMutex);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void wait_for_threads_to_finish(PThreadPool Pthreadpool) {
     /*
@@ -222,7 +218,7 @@ void wait_for_threads_to_finish(PThreadPool Pthreadpool) {
     }
 }
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void threadpool_destroy(PThreadPool Pthreadpool) {
 	/*
@@ -242,11 +238,11 @@ void threadpool_destroy(PThreadPool Pthreadpool) {
     free(Pthreadpool); // Free the thread pool object itself
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int thread_init(PThreadPool Pthreadpool, Pthread* PThread, int id) {
     /*
     Initialize a thread within a thread pool.
-    
     Parameters:
         - Pthreadpool: Pointer to the thread pool structure
         - PThread: Pointer to the thread structure
@@ -284,6 +280,8 @@ int thread_init(PThreadPool Pthreadpool, Pthread* PThread, int id) {
 
     return 0;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void* thread_execute(void* threadData) {
 	/* 
@@ -362,12 +360,14 @@ void thread_hold(int signum) {
     unlock_mutex(&hold_mutex); // Unlock the mutex after the loop
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void execute_task(ThreadPool* Pthreadpool, task* Ptask) {
     /*
 	* This function executes a task in the thread pool.
 	* It takes a ThreadPool pointer Pthreadpool and a task pointer Ptask as parameters.
 	*/
-	// Extract the function pointer and argument from the task
+
     void (*task_function)(void*) = Ptask->func; // Get the function pointer from the task
     void* task_argument = Ptask->arg; // Get the argument from the task
 
@@ -377,6 +377,8 @@ void execute_task(ThreadPool* Pthreadpool, task* Ptask) {
     // Free the task memory
     free(Ptask); // Free the memory allocated for the task
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void increment_working_count(ThreadPool* Pthreadpool) {
 	/*
@@ -388,6 +390,7 @@ void increment_working_count(ThreadPool* Pthreadpool) {
     unlock_mutex(&Pthreadpool->threadCountMutex); // Unlock the thread count mutex
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void decrement_working_count(ThreadPool* Pthreadpool) {
 	/*
@@ -405,6 +408,7 @@ void decrement_working_count(ThreadPool* Pthreadpool) {
     unlock_mutex(&Pthreadpool->threadCountMutex); // Unlock the thread count mutex
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void set_thread_name(pthread_t thread_id) {
 	/*
@@ -421,6 +425,8 @@ void set_thread_name(pthread_t thread_id) {
         exit(1); // Exit the program with an error status
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void set_up_signal_handling() {
 	/*
@@ -446,6 +452,8 @@ void set_up_signal_handling() {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void free_threads(PThreadPool Pthreadpool) {
 	/*
 	* This function frees the thread objects and threads array in the thread pool.
@@ -460,7 +468,8 @@ void free_threads(PThreadPool Pthreadpool) {
     free(Pthreadpool->threads); // Free the memory allocated for the threads array
 }
 
-// Lock the given mutex
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void lock_mutex(pthread_mutex_t* mutex) {
     /*
     Locks the given mutex.
@@ -478,7 +487,8 @@ void lock_mutex(pthread_mutex_t* mutex) {
     }
 }
 
-// Unlock the given mutex
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void unlock_mutex(pthread_mutex_t* mutex) {
     /*
     Unlocks the given mutex.

@@ -1,5 +1,7 @@
 #include "semaphore.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Initializes a semaphore with a given value
 void semaphore_init(semaphore *PSemaphore, int value) {
     // Check if semaphore pointer is NULL
@@ -33,6 +35,8 @@ void semaphore_init(semaphore *PSemaphore, int value) {
     PSemaphore->count = 0;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Signals the semaphore
 void release_semaphore(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
@@ -62,6 +66,8 @@ void release_semaphore(Psemaphore PSemaphore) {
     UNLOCK_MUTEX(&PSemaphore->mutex);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Signals all waiting threads on the semaphore
 void release_all_semaphores(Psemaphore PSemaphore) {
     // Check if semaphore pointer is NULL
@@ -86,6 +92,8 @@ void release_all_semaphores(Psemaphore PSemaphore) {
     // Unlock the mutex to allow other threads to access the shared data
     UNLOCK_MUTEX(&PSemaphore->mutex);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Waits on the semaphore until its value is 1
 void semaphore_wait(Psemaphore PSemaphore) {
@@ -119,6 +127,8 @@ void semaphore_wait(Psemaphore PSemaphore) {
     // Unlock the mutex to allow other threads to access the shared data
     UNLOCK_MUTEX(&PSemaphore->mutex);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Destroys the semaphore and frees any associated resources
 void semaphore_destroy(Psemaphore PSemaphore) {
