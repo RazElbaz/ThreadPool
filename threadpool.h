@@ -18,7 +18,7 @@ typedef struct ThreadPool {
     pthread_cond_t threadsAllIdleCondition; // Condition variable to signal when all threads are idle
     TaskQueue taskQueue;                    // Task queue for holding tasks
     int maxThreadCount;                     // Maximum allowed thread count in the pool
-    int activeThread;                             // Flag to indicate if the thread pool is active
+    int activeThread;                       // Flag to indicate if the thread pool is active
 } ThreadPool, *PThreadPool;
 
 
