@@ -88,6 +88,11 @@ Encrypting input from a pipe and saving the encrypted data to a file
 Decrypting input from a file and displaying the decrypted data on the console  
 ```./coder 3 -d < encrypted.txt```
 
+*Example 5:*   
+Encrypting input from a file and piping the encrypted data to another command
+```cat myfile.txt | ./coder 7 -e | gzip > encrypted.gz```
+Decrypting input from a compressed file and saving the decrypted data to a file   
+```gunzip -c encrypted.gz | ./coder 7 -d > decrypted.txt```
 Please note that the encryption algorithm provided is for demonstration purposes only and may not be suitable for secure encryption requirements.
 
 # Here's an overview of the files and their roles:
