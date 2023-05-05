@@ -2,9 +2,8 @@ CC=gcc
 CFLAGS=-Wall -pthread -lpthread
 OBJ=threadpool.o task.o semaphore.o
 
+export LD_LIBRARY_PATH=./bin:$LD_LIBRARY_PATH
 all: coder
-
-export LD_LIBRARY_PATH=/path/to/libraries/folder:$LD_LIBRARY_PATH
 
 coder: codec.h $(OBJ)
 	$(CC) $(CFLAGS) main.c -L. -lCodec -o coder $(OBJ)
