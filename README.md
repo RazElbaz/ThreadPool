@@ -82,6 +82,12 @@ Decrypting the encrypted file and displaying the decrypted data on the console
 Decrypting the encrypted file and saving the decrypted data to a file  
 ```./coder 5 -d < encrypted_file.txt > decrypted_file.txt```  
 
+*Example 4:*  
+Encrypting input from a pipe and saving the encrypted data to a file    
+ ```echo "Hello, World!" | ./coder 3 -e > encrypted.txt```
+Decrypting input from a file and displaying the decrypted data on the console  
+```./coder 3 -d < encrypted.txt```
+
 Please note that the encryption algorithm provided is for demonstration purposes only and may not be suitable for secure encryption requirements.
 
 # Here's an overview of the files and their roles:
