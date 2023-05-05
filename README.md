@@ -58,7 +58,7 @@ My tools will take input in sdtIn and write the encrypted/decrypted data to stdO
 "-e" and "-d" flags will be used for encryption and decryption accordingly.
 
 # Example of use:
-**Example 1:**
+**Example 1:**  
  ```./coder 2 -e < myfile.txt > encripted_file.txt```    
  ```./coder 2 -d < encripted_file.txt  > test.txt ```  
  ```cat encripted_file.txt | ./coder 2 -d > your_original_file.txt```  
@@ -66,7 +66,7 @@ My tools will take input in sdtIn and write the encrypted/decrypted data to stdO
   
 Note: Replace 2 with the actual encryption key.  
 
-**Example 2:**  
+**Example 2:**   
 ```./coder 20 -e < myfile.txt > encripted_file.txt```  
 ```./coder 20 -d < encripted_file.txt  > check.txt```  
 ```cat encripted_file.txt | ./coder 20 -d > your_original_file.txt```  
@@ -89,10 +89,12 @@ Decrypting input from a file and displaying the decrypted data on the console
 ```./coder 3 -d < encrypted.txt```
 
 **Example 5:**   
-Encrypting input from a file and piping the encrypted data to another command
-```cat myfile.txt | ./coder 7 -e | gzip > encrypted.gz```
-Decrypting input from a compressed file and saving the decrypted data to a file   
-```gunzip -c encrypted.gz | ./coder 7 -d > decrypted.txt```
+Encrypting input from a file and piping the encrypted data to another command  
+```cat myfile.txt | ./coder 7 -e | gzip > encrypted.gz```  
+Decrypting input from a compressed file and saving the decrypted data to a file    
+```gunzip -c encrypted.gz | ./coder 7 -d > decrypted.txt```  
+
+
 Please note that the encryption algorithm provided is for demonstration purposes only and may not be suitable for secure encryption requirements.
 
 # Here's an overview of the files and their roles:
