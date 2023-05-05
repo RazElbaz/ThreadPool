@@ -1,5 +1,6 @@
 
 #include "threadpool.h"
+
 pthread_mutex_t hold_mutex = PTHREAD_MUTEX_INITIALIZER;  // Mutex for hold condition
 pthread_cond_t hold_cond = PTHREAD_COND_INITIALIZER;  // Condition variable for hold condition
 
@@ -19,10 +20,10 @@ struct ThreadPool* threadpool_init(int num_threads) {
     Note: The returned ThreadPool structure should be freed using the appropriate cleanup functions when no longer needed.
     */
 
-    // Initialize the PendingThreads flag to 0 and the RunningThreads flag to 1
+    // Initialize the flags
     PendingThreads = 0;
     RunningThreads = 1;
-
+    
     if (num_threads < 0) {
         perror("threadpool_init(): Invalid num_threads\n"); // Print error message if num_threads is negative
         exit(1);
@@ -100,11 +101,15 @@ void initializeThreadPool(PThreadPool Pthreadpool, int num_threads) {
     Note: The thread pool should be properly allocated and initialized before calling this function.
     */
 
-    int threadIndex;
-
+    int threadIndex, result;
+    Pthreadpool->activeThread=1;
     // Initialize each thread in the thread pool
     for (threadIndex = 0; threadIndex < num_threads; threadIndex++) {
-        thread_init(Pthreadpool, &(Pthreadpool->threads[threadIndex]), threadIndex);
+        result=thread_init(Pthreadpool, &(Pthreadpool->threads[threadIndex]), threadIndex);
+        if (result != 0) {
+            perror("init");
+            exit(1);
+        }
     }
 
     // Wait until all threads have started running
@@ -154,7 +159,6 @@ void threadpool_new_task(ThreadPool* Pthreadpool, void (*function)(void*), void*
     TaskQueue_push(&(Pthreadpool->taskQueue), newTask);
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void threadpool_wait(PThreadPool Pthreadpool) {
@@ -183,6 +187,7 @@ void threadpool_wait(PThreadPool Pthreadpool) {
     unlock_mutex(&Pthreadpool->threadCountMutex);
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void wait_for_threads_to_finish(PThreadPool Pthreadpool) {
@@ -192,21 +197,18 @@ void wait_for_threads_to_finish(PThreadPool Pthreadpool) {
     Parameters:
         - Pthreadpool: Pointer to the thread pool structure
     */
-
     const double TIMEOUT = 1.0;  // Timeout in seconds
 
-    time_t start_time, current_time;
+    clock_t start_time = clock();
     double elapsed_time = 0.0;
-
-    time(&start_time);
 
     // Wait until either the timeout is reached or all threads have finished
     while (elapsed_time < TIMEOUT && Pthreadpool->runningThreadCount) {
         // Release all semaphores to unblock waiting threads
         release_all_semaphores(Pthreadpool->taskQueue.has_tasks);
 
-        time(&current_time);
-        elapsed_time = difftime(current_time, start_time);
+        clock_t current_time = clock();
+        elapsed_time = (double)(current_time - start_time) / CLOCKS_PER_SEC;
     }
 
     // If threads are still running, wait with a sleep interval of 1 second
@@ -236,6 +238,8 @@ void threadpool_destroy(PThreadPool Pthreadpool) {
     free_threads(Pthreadpool); // Free the thread objects and threads array
 
     free(Pthreadpool); // Free the thread pool object itself
+
+    Pthreadpool->activeThread=0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,9 +260,10 @@ int thread_init(PThreadPool Pthreadpool, Pthread* PThread, int id) {
     *PThread = (Pthread) calloc(1, sizeof(struct Thread));
     if (!*PThread) {
         perror("calloc");
-        exit(1);
+        return -1;
     }
 
+    Pthreadpool->activeThread=1;
     (*PThread)->threadPoolPtr = Pthreadpool;
     (*PThread)->id = id;
 
@@ -267,7 +272,7 @@ int thread_init(PThreadPool Pthreadpool, Pthread* PThread, int id) {
     if (result != 0) {
         perror("pthread_create");
         free(*PThread); // Cleanup allocated memory
-        exit(1);
+        return -1;
     }
 
     // Detach the thread
@@ -275,7 +280,7 @@ int thread_init(PThreadPool Pthreadpool, Pthread* PThread, int id) {
     if (result != 0) {
         perror("pthread_detach");
         free(*PThread); // Cleanup allocated memory
-        exit(1);
+        return -1;
     }
 
     return 0;
