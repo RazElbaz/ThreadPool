@@ -111,7 +111,7 @@ Please note that the encryption algorithm provided is for demonstration purposes
 
 ```main.h``` header file defines the necessary data structures, function prototypes, and global variables to be used in the main.c file, which implements the logic for the CMD TOOL, including reading input, setting up encryption or decryption, utilizing the threadpool, and handling the output.
 
-`myfile.txt` file with 1385 original characters
+`myfile.txt` file with 1385 **random** characters
 `encrypted_file.txt` Encrypted file of `myfile.txt` with key=2
 `Tortoise_Hare.tx`t file with a story to further test
 `test.txt` Encrypted file of  `Tortoise_Hare.txt` with key=2
