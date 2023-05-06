@@ -67,12 +67,12 @@ I created a test file called `test.c` for an assignment that performs encryption
 # Example of use:
 **Example 1:**  
  ```./coder 2 -e < myfile.txt > encripted_file.txt```    
- ```./coder 2 -d < encripted_file.txt  > test.txt ```  
+ ```./coder 2 -d < encripted_file.txt  > decrypted_file.txt ```  
  ```cat encripted_file.txt | ./coder 2 -d > decrypted_file.txt```  
 To compare the contents of two files: ```diff myfile.txt decrypted_file.txt```  
 **or:**  
  ```./coder 2 -e < myfile.txt > encripted_file```    
- ```./coder 2 -d < encripted_file  > test ```  
+ ```./coder 2 -d < encripted_file  > decrypted_file ```  
  ```cat encripted_file | ./coder 2 -d > decrypted_file```  
  To compare the contents of two files: ```diff myfile.txt decrypted_file```  
   
@@ -82,12 +82,12 @@ Note ♥: Replace 2 with the actual encryption key.
 
 **Example 2:**   
  ```./coder 20 -e < myfile.txt > encripted_file.txt```    
- ```./coder 20 -d < encripted_file.txt  > test.txt ```  
+ ```./coder 20 -d < encripted_file.txt  > decrypted_file.txt ```  
  ```cat encripted_file.txt | ./coder 20 -d > decrypted_file.txt```  
 comparing the contents of two files: ```diff myfile.txt decrypted_file.txt```  
 **or:**  
  ```./coder 20 -e < myfile.txt > encripted_file```    
- ```./coder 20 -d < encripted_file  > test ```  
+ ```./coder 20 -d < encripted_file  > decrypted_file ```  
  ```cat encripted_file | ./coder 20 -d > decrypted_file```  
  comparing the contents of two files: ```diff myfile.txt decrypted_file```
 
