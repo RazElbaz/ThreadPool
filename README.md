@@ -67,7 +67,7 @@ To compare the contents of two files: ```diff myfile.txt decrypted_file.txt```
  ```./coder 2 -e < myfile.txt > encripted_file```    
  ```./coder 2 -d < encripted_file  > test ```  
  ```cat encripted_file | ./coder 2 -d > decrypted_file```  
- To compare the contents of two files: ```diff myfile.txt decrypted_file```
+ To compare the contents of two files: ```diff myfile.txt decrypted_file```  
   
 Note: Replace 2 with the actual encryption key.  
 
@@ -92,19 +92,33 @@ Decrypting the encrypted file and displaying the decrypted data on the console
 ```./coder 5 -d < encrypted_file.txt```  
 Decrypting the encrypted file and saving the decrypted data to a file  
 ```./coder 5 -d < encrypted_file.txt > decrypted_file.txt```  
+**or:**  
+ Encrypting the file and displaying the encrypted data on the console:     
+ ```./coder 5 -e < myfile.txt```  
+  Encrypting the file and saving the encrypted data to a file  
+```./coder 5 -e < myfile.txt > encrypted_file```  
+Decrypting the encrypted file and displaying the decrypted data on the console  
+```./coder 5 -d < encrypted_file```  
+Decrypting the encrypted file and saving the decrypted data to a file  
+```./coder 5 -d < encrypted_file > decrypted_file``` 
 
 **Example 4:**  
 Encrypting input from a pipe and saving the encrypted data to a file    
  ```echo "Hello, World!" | ./coder 3 -e > encrypted.txt```  
 Decrypting input from a file and displaying the decrypted data on the console  
 ```./coder 3 -d < encrypted.txt```
+**or:**  
+Encrypting input from a pipe and saving the encrypted data to a file    
+ ```echo "Hello, World!" | ./coder 3 -e > encrypted```  
+Decrypting input from a file and displaying the decrypted data on the console  
+```./coder 3 -d < encrypted```  
 
 **Example 5:**   
 Encrypting input from a file and piping the encrypted data to another command  
 ```cat myfile.txt | ./coder 7 -e | gzip > encrypted.gz```  
 Decrypting input from a compressed file and saving the decrypted data to a file    
 ```gunzip -c encrypted.gz | ./coder 7 -d > decrypted.txt```  
-
+To compare the contents of two files: ```diff myfile.txt decrypted``` 
 
 Please note that the encryption algorithm provided is for demonstration purposes only and may not be suitable for secure encryption requirements.
 
