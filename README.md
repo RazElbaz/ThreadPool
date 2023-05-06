@@ -1,5 +1,5 @@
 
-# Threaded Encryption/Decryption Tool
+# Threadpool Encryption/Decryption Tool
 This is a CMD tool for encrypting and decrypting data using a provided encryption algorithm. The tool utilizes multi-threading to parallelize the encryption/decryption process and improve performance on multi-core systems.
 
 ## written by ✨
