@@ -122,7 +122,7 @@ Pinput allocate_and_read_data() {
     data->value = (char *)malloc(MAX_DATA_COUNT);
     if (!data->value) {
         perror("malloc");
-        free(data);
+        free(data); // Free the allocated memory for the data item
         exit(1);
     }
 
