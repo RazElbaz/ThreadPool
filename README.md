@@ -132,7 +132,7 @@ Encrypting input from a file and piping the encrypted data to another command
 ```cat myfile.txt | ./coder 7 -e | gzip > encrypted.gz```  
 Decrypting input from a compressed file and saving the decrypted data to a file    
 ```gunzip -c encrypted.gz | ./coder 7 -d > decrypted.txt```  
-To compare the contents of two files: ```diff myfile.txt decrypted``` 
+To compare the contents of two files: ```diff myfile.txt decrypted.txt``` 
 
 Please note that the encryption algorithm provided is for demonstration purposes only and may not be suitable for secure encryption requirements.
 
