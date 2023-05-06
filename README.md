@@ -82,14 +82,14 @@ Note ♥: Replace 2 with the actual encryption key.
 ---
 
 **Example 2:**   
- ```./coder 20-e < myfile.txt > encripted_file.txt```    
- ```./coder 20-d < encripted_file.txt  > test.txt ```  
- ```cat encripted_file.txt | ./coder 20-d > decrypted_file.txt```  
+ ```./coder 20 -e < myfile.txt > encripted_file.txt```    
+ ```./coder 20 -d < encripted_file.txt  > test.txt ```  
+ ```cat encripted_file.txt | ./coder 20 -d > decrypted_file.txt```  
 comparing the contents of two files: ```diff myfile.txt decrypted_file.txt```  
 **or:**  
- ```./coder 20-e < myfile.txt > encripted_file```    
- ```./coder 20-d < encripted_file  > test ```  
- ```cat encripted_file | ./coder 20-d > decrypted_file```  
+ ```./coder 20 -e < myfile.txt > encripted_file```    
+ ```./coder 20 -d < encripted_file  > test ```  
+ ```cat encripted_file | ./coder 20 -d > decrypted_file```  
  comparing the contents of two files: ```diff myfile.txt decrypted_file```
 
 ---
