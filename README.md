@@ -77,8 +77,8 @@ To compare the contents of two files: ```diff myfile.txt decrypted_file.txt```
  ```cat encripted_file | ./coder 2 -d > decrypted_file```  
  To compare the contents of two files: ```diff myfile.txt decrypted_file```  
   
-Note: Replace 2 with the actual encryption key.  
-
+Note ♥: Replace 2 with the actual encryption key.  
+---
 **Example 2:**   
  ```./coder 20-e < myfile.txt > encripted_file.txt```    
  ```./coder 20-d < encripted_file.txt  > test.txt ```  
@@ -90,7 +90,7 @@ comparing the contents of two files: ```diff myfile.txt decrypted_file.txt```
  ```cat encripted_file | ./coder 20-d > decrypted_file```  
  comparing the contents of two files: ```diff myfile.txt decrypted_file```
 
-
+---
 **Example 3:**  
  Encrypting the file and displaying the encrypted data on the console:     
  ```./coder 5 -e < myfile.txt```  
@@ -109,7 +109,7 @@ Decrypting the encrypted file and displaying the decrypted data on the console
 ```./coder 5 -d < encrypted_file```  
 Decrypting the encrypted file and saving the decrypted data to a file  
 ```./coder 5 -d < encrypted_file > decrypted_file``` 
-
+---
 **Example 4:**  
 Encrypting input from a pipe and saving the encrypted data to a file    
  ```echo "Hello, World!" | ./coder 3 -e > encrypted.txt```  
@@ -120,7 +120,7 @@ Encrypting input from a pipe and saving the encrypted data to a file
  ```echo "Hello, World!" | ./coder 3 -e > encrypted```  
 Decrypting input from a file and displaying the decrypted data on the console  
 ```./coder 3 -d < encrypted```  
-
+---
 **Example 5:**   
 Encrypting input from a file and piping the encrypted data to another command  
 ```cat myfile.txt | ./coder 7 -e | gzip > encrypted.gz```  
