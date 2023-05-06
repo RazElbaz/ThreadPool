@@ -59,6 +59,10 @@ My tools will take input in sdtIn and write the encrypted/decrypted data to stdO
 
 # Testing:  
 I created a test file for the assignment which performs encryption and decryption in randomly generated text files of different lengths, and checks the correctness of the encryption/decryption process using the diff command.  
+**how to run:**  
+1. Run the command `make` or `make all` if you haven't already.  
+2. Compile the program by running the command `gcc test.c -o test` . This will compile the test.c file and create an executable named test.  
+3. Run the program by executing the command ./test.  
 
 # Example of use:
 **Example 1:**  
