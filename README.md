@@ -62,12 +62,12 @@ My tools will take input in sdtIn and write the encrypted/decrypted data to stdO
  ```./coder 2 -e < myfile.txt > encripted_file.txt```    
  ```./coder 2 -d < encripted_file.txt  > test.txt ```  
  ```cat encripted_file.txt | ./coder 2 -d > decrypted_file.txt```  
-comparing the contents of two files: ```diff myfile.txt decrypted_file.txt```  
+To compare the contents of two files: ```diff myfile.txt decrypted_file.txt```  
 **or:**  
  ```./coder 2 -e < myfile.txt > encripted_file```    
  ```./coder 2 -d < encripted_file  > test ```  
  ```cat encripted_file | ./coder 2 -d > decrypted_file```  
- comparing the contents of two files: ```diff myfile.txt decrypted_file```
+ To compare the contents of two files: ```diff myfile.txt decrypted_file```
   
 Note: Replace 2 with the actual encryption key.  
 
