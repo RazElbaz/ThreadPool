@@ -2,23 +2,24 @@
 
 // Structure to represent a thread
 typedef struct Thread {
-    int id;                          // Thread ID
-    pthread_t pthread;                // Pointer to the thread object
+    int id;                                // Thread ID
+    int status;                            // Additional member variable for thread status
+    pthread_t pthread;                     // Pointer to the thread object
     struct ThreadPool* threadPoolPtr;      // Pointer to the thread pool
-    int status;                      // Additional member variable for thread status
+    
 
 } *Pthread;
 
 // Structure to represent a thread pool
 typedef struct ThreadPool {
     Pthread* threads;                       // Array of thread objects
+    int activeThread;                       // Flag to indicate if the thread pool is active
+    int maxThreadCount;                     // Maximum allowed thread count in the pool
+    TaskQueue taskQueue;                    // Task queue for holding tasks
     volatile int runningThreadCount;        // Number of currently running threads
     volatile int workingThreadCount;        // Number of threads currently executing tasks
     pthread_mutex_t threadCountMutex;       // Mutex for thread count synchronization
-    pthread_cond_t threadsAllIdleCondition; // Condition variable to signal when all threads are idle
-    TaskQueue taskQueue;                    // Task queue for holding tasks
-    int maxThreadCount;                     // Maximum allowed thread count in the pool
-    int activeThread;                       // Flag to indicate if the thread pool is active
+    pthread_cond_t threadsAllIdleCondition; // Condition variable to signal when all threads are idle  
 } ThreadPool, *PThreadPool;
 
 

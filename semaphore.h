@@ -11,10 +11,11 @@
 
 // Define a struct for a semaphore, containing a mutex and condition variable
 typedef struct semaphore {
-    pthread_mutex_t mutex;    // Mutex for protecting shared data
-    pthread_cond_t cond;      // Condition variable for thread synchronization
     int value;                // The value of the semaphore
     int count;                // Number of threads waiting on the semaphore
+    pthread_cond_t cond;      // Condition variable for thread synchronization
+    pthread_mutex_t mutex;    // Mutex for protecting shared data
+    
 } semaphore, *Psemaphore;
 
 // Function to initialize a semaphore with a given value
