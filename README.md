@@ -20,7 +20,7 @@ This is a CMD tool for encrypting and decrypting data using a provided encryptio
 The goal of this tool is to implement a threadpool mechanism and synchronization to improve the performance of an encryption algorithm. The tool takes advantage of multi-threading to utilize multiple cores and process the encryption or decryption tasks concurrently.
 
 # CMD Syntax
-Compile files first with ```make``` or ```make all``` in terminal.
+## Compile files first with ```make``` or ```make all``` in terminal.
 
 The tool can be used with the following syntax:
 
@@ -56,6 +56,9 @@ The goal of this task was to implement a CMD TOOL that uses the provided encrypt
 
 My tools will take input in sdtIn and write the encrypted/decrypted data to stdOut.
 "-e" and "-d" flags will be used for encryption and decryption accordingly.
+
+# Testing:  
+I created a test file for the assignment which performs encryption and decryption in randomly generated text files of different lengths, and checks the correctness of the encryption/decryption process using the diff command.  
 
 # Example of use:
 **Example 1:**  
