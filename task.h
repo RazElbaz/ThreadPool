@@ -30,13 +30,13 @@ void release_lock(PTaskQueue PTask);
 // Helper function to acquire lock on mutex and return an error code if lock fails
 int acquire_lock(PTaskQueue PTask);
 
-/*Initializes a TaskQueue. It takes a pointer to a TaskQueue as an argument and returns an integer indicating success or failure.*/
+//Initializes a TaskQueue. It takes a pointer to a TaskQueue as an argument and returns an integer indicating success or failure.
 int   TaskQueue_init(PTaskQueue PTask);
 
-/* Adds a task to the end of the queue. It takes a pointer to a TaskQueue and a pointer to a task as arguments.*/
+//Adds a task to the end of the queue. It takes a pointer to a TaskQueue and a pointer to a task as arguments.
 void  TaskQueue_push(PTaskQueue PTask, Ptask Pnew_task);
 
-/*Removes and returns the first task from the queue. It takes a pointer to a TaskQueue as an argument and returns a pointer to the removed task.*/
+//Removes and returns the first task from the queue. It takes a pointer to a TaskQueue as an argument and returns a pointer to the removed task.
 Ptask TaskQueue_pull(PTaskQueue PTask);
 
 // Pulls a task from the head of the task queue
@@ -57,7 +57,7 @@ int is_queue_empty(PTaskQueue PTask);
 // Updates the head, tail, and size of the task queue when it has only one task
 void update_queue_single_task(PTaskQueue PTask);
 
-/*Destroys a TaskQueue and frees all memory associated with it. It takes a pointer to a TaskQueue as an argument.*/
+//Destroys a TaskQueue and frees all memory associated with it. It takes a pointer to a TaskQueue as an argument.
 void  TaskQueue_destroy(PTaskQueue PTask);
 
 // Frees the semaphore memory
