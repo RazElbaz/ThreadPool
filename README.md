@@ -12,7 +12,7 @@ This is a CMD tool for encrypting and decrypting data using a provided encryptio
     
           <td align="center"><a href="https://github.com/RazElbaz"><img src="https://avatars.githubusercontent.com/u/93310416?v=4" width="100px;" alt="Raz Elbaz"/><br /><sub><b>Raz Elbaz</b></sub></a><br /><a href="https://github.com/RazElbaz" title="Code">💻</a></td>
 
-  </tr>
+
 </table>
 
 </table>
