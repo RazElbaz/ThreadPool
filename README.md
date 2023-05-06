@@ -24,10 +24,10 @@ Compile files first with ```make``` or ```make all``` in terminal.
 
 The tool can be used with the following syntax:
 
-```coder key -e < input_file > encrypted_file```  
-```coder key -d < encrypted_file > output_file```  
-```pipe | coder key -e > encrypted_file```  
-```cat encrypted_file | coder key -d > output_file```  
+```./coder key -e < input_file > encrypted_file```  
+```./coder key -d < encrypted_file > output_file```  
+```pipe | ./coder key -e > encrypted_file```  
+```cat encrypted_file | ./coder key -d > output_file```  
 
 **Here's an explanation of the different components:**
 
@@ -39,7 +39,7 @@ The tool can be used with the following syntax:
 ```> output_file```: Output redirection to a file. The decrypted data will be written to output_file.  
 ```pipe |```: Input piped from another command. The output of the preceding command will be used as input for the encryption process.  
 
-To use the program, you would replace key with the actual encryption/decryption key and specify the appropriate files for input, output, and piping, depending on your specific use case.
+**To use the program, you would replace key with the actual encryption/decryption key and specify the appropriate files for input, output, and piping, depending on your specific use case.**
 
 # Input/Output
 The tool reads input data from stdin and writes the encrypted/decrypted data to stdout. You can use shell redirection and piping to provide input data and capture the output.
@@ -61,15 +61,26 @@ My tools will take input in sdtIn and write the encrypted/decrypted data to stdO
 **Example 1:**  
  ```./coder 2 -e < myfile.txt > encripted_file.txt```    
  ```./coder 2 -d < encripted_file.txt  > test.txt ```  
- ```cat encripted_file.txt | ./coder 2 -d > your_original_file.txt```  
-   
+ ```cat encripted_file.txt | ./coder 2 -d > decrypted_file.txt```  
+comparing the contents of two files: ```diff myfile.txt decrypted_file.txt```  
+**or:**
+ ```./coder 2 -e < myfile.txt > encripted_file```    
+ ```./coder 2 -d < encripted_file  > test ```  
+ ```cat encripted_file | ./coder 2 -d > decrypted_file```  
+ comparing the contents of two files: ```diff myfile.txt decrypted_file```
   
 Note: Replace 2 with the actual encryption key.  
 
 **Example 2:**   
-```./coder 20 -e < myfile.txt > encripted_file.txt```  
-```./coder 20 -d < encripted_file.txt  > check.txt```  
-```cat encripted_file.txt | ./coder 20 -d > your_original_file.txt```  
+ ```./coder 20-e < myfile.txt > encripted_file.txt```    
+ ```./coder 20-d < encripted_file.txt  > test.txt ```  
+ ```cat encripted_file.txt | ./coder 20-d > decrypted_file.txt```  
+comparing the contents of two files: ```diff myfile.txt decrypted_file.txt```  
+**or:**  
+ ```./coder 20-e < myfile.txt > encripted_file```    
+ ```./coder 20-d < encripted_file  > test ```  
+ ```cat encripted_file | ./coder 20-d > decrypted_file```  
+ comparing the contents of two files: ```diff myfile.txt decrypted_file```
 
 
 **Example 3:**  
