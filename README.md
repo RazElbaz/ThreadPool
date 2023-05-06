@@ -63,7 +63,7 @@ I created a test file called `test.c` for an assignment that performs encryption
 **how to run:**  
 1. Run the command `make` or `make all` if you haven't already.  
 2. Compile the program by running the command `gcc test.c -o test` . This will compile the test.c file and create an executable named test.  
-3. Run the program by executing the command ./test.  
+3. Run the program by executing the command `./test`.  
 
 # Example of use:
 **Example 1:**  
