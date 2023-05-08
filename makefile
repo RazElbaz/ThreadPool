@@ -17,7 +17,7 @@ task.o: task.c task.h
 threadpool.o: threadpool.c threadpool.h
 	$(CC) -c threadpool.c $(CFLAGS)
 
-main.o: main.c threadpool.h task.h semaphore.h thread.h
+main.o: main.c threadpool.h task.h semaphore.h thread.h main.h
 	$(CC) -c main.c $(CFLAGS)
 
 clean:
